@@ -1,0 +1,13 @@
+.aboutWrapper{
+   margin-top: 80px;
+   background: whtie;
+   display: flex;
+   flex-flow: column;
+   flex-grow: 1;
+   justify-content: center;
+   align-items: center;
+   .aboutContainer{
+      display: flex;
+      width: 1440px;
+   }
+}

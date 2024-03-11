@@ -1,0 +1,97 @@
+@font-face {
+   font-family: JuliusSansOne;
+   src: url(JuliusSansOne-Regular.ttf);
+ }
+@font-face {
+   font-family: Inter;
+   src: url(Inter-VariableFont_slnt,wght.ttf);
+ }
+
+.navbarWrapper{
+   opacity: 1;
+   height: 60px;
+   z-index: 2;
+   width: 100%;
+   display: flex;
+   justify-content: center;
+   transition: 0.3s ease;
+   align-items: center;
+   border-bottom: 1px solid gray;
+
+   .logo{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Inter;
+      font-size: 26px;
+      font-weight: normal;
+   }
+   .navbar{
+      display: flex;
+      justify-content: center;
+      width: 70%;
+      height: 58px;
+      transform: translateY(0px);
+      transition: 0.3s ease;
+      background: transparent;
+      font-family: JuliusSansOne;
+      ul{
+         justify-content: space-around;
+         display: flex;
+         align-items: center;
+         flex-flow: row;
+         height: 100%;
+         margin: 0;
+         .searchBarWrapper{
+            padding: 0;
+            border-radius: 15px;
+            width: 250px!important;
+            height: 30px;
+            border: 1px solid black;
+            .searchBar{
+               all: unset;
+               margin: 0 10px;
+               width: 80%;
+               height: 100%;
+               font-size: 15px;
+            }
+         }
+         .searchBarWrapper:hover{
+            background: none;
+            cursor: text;
+         }
+         .settings{
+            padding: 0 5px;
+         }
+         li{
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            list-style: none;
+            height: 90%;
+            background: white;
+            padding: 0 20px;
+            margin: 0 20px;
+            border-radius: 10px;
+            transition: 0.3s ease;
+            font-size: 20px;
+            .link{
+               color: black;
+               text-decoration: none;
+            }
+         }
+         li:hover{
+            background: #aeaeae;
+         }
+         
+      }
+      
+   }
+}
+.navbarWrapper:hover{
+   opacity: 1;
+   nav{
+      // transform: translateY(0px);
+   }
+}
