@@ -1,64 +1,77 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const UI = ({ selectedObject }) => {
+const UI = ({ MyContext, isUiHidden, hideObject, wrapperRef, selectedObject }) => {
+   const context = useContext(MyContext)
+   let model = context.contextValue
+   const [isModelLoaded, setIsModelLoaded] = useState(false);
+   const [highlightedObject, setHighlightedObject] = useState(null);
    const navigate = useNavigate()
-
-   const [isUIHidden, setIsUIHidden] = useState(false);
-
    const UIWrapperRef = useRef(null)
+   const itemListRef = useRef(null)
    const hideBtnRef = useRef(null)
+
    const menuInfoHandler = () => {
       console.log('menu info')
    }
-   const hideMenu = () => {
-      console.log('hide menu')
-      if (!isUIHidden) {
-         UIWrapperRef.current.style.opacity = '0'
-         hideBtnRef.current.style.borderRadius = '3px'
-         setIsUIHidden(true)
+
+   useEffect(() => {
+      if (model.length > 0) {
+         setIsModelLoaded(true)
       }
       else {
-         UIWrapperRef.current.style.opacity = '1'
-         console.log(hideBtnRef)
-         setIsUIHidden(false)
+         setIsModelLoaded(false)
       }
+   }, [model]);
 
-   }
+   useEffect(() => {
+      if (isUiHidden) {
+         UIWrapperRef.current.style.width = '0'
+      }
+      else {
+         UIWrapperRef.current.style.width = '300px'
+      }
+   }, [isUiHidden]);
+
+   useEffect(() => {
+      const asdf = model.find(obj => obj.name === selectedObject)
+      if (asdf) {
+         const hObject = document.getElementById(asdf.uuid)
+         if (hObject) {
+            if (highlightedObject) {
+               highlightedObject.style.background = 'transparent'
+            }
+            hObject.style.background = 'rgba(256,256,256,0.3)'
+            hObject.scrollIntoView({ behavior: "smooth", block: "center" })
+            setHighlightedObject(hObject)
+         }
+      }
+   }, [selectedObject]);
+
    return (
-      <div className='UIWrapper2'>
-         <div>
-         </div>
-         <div ref={UIWrapperRef} className="UI">
-            <div ref={hideBtnRef} className="buttonWrapper">
-               <div onClick={() => hideMenu()} className="button hideMenu">
-                  hide
-               </div>
-            </div>
+      <div ref={UIWrapperRef} className='UIWrapper2'>
+
+         <div ref={itemListRef} className="List">
             {/* <div className="objectName">
                   {selectedObject !== '' && selectedObject}
                </div> */}
-            <div className="UIMenu">
-               <div onClick={() => {
-                  menuInfoHandler();
-                  navigate('/Chewing')
-                  }} className="button info">
-                  1
+            {isModelLoaded && model.map((object) =>
+               <div key={object.uuid} id={object.uuid} className="item">
+                  <div className="itemDesc">
+                     {object.name.replace(/_/g, ' ')}
+                  </div>
+                  <div className="buttons">
+                     <div onClick={() => { hideObject(object) }} className="toggleHide button">
+                        H
+                     </div>
+                     <div onClick={() => { menuInfoHandler(); navigate('/Chewing') }} className="info button">
+                        I
+                     </div>
+                  </div>
                </div>
-            </div>
-            <div className="UIMenu">
-               <div onClick={() => menuInfoHandler()} className="button info">
-                  2
-               </div>
-            </div>
-            <div className="UIMenu last">
-               <div onClick={() => menuInfoHandler()} className="button info">
-                  3
-               </div>
-            </div>
-
+            )
+            }
          </div>
-
       </div>
    );
 };

@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import UI from './UI';
+import HideToggler from './HideToggler';
 
-const UIWrapper = ({selectedObject}) => {
+const UIWrapper = ({hideObject, MyContext, selectedObject}) => {
+   const [isUiHidden, setIsUiHidden] = useState(false);
+   const wrapperRef = useRef(null)
+
+   const hideToggle = () => {
+      setIsUiHidden(!isUiHidden)
+   }
    return (
-      <div className='UIWrapper'>
-         <UI selectedObject={selectedObject} />
+      <div ref = {wrapperRef} className='UIWrapper'>
+         <UI MyContext={MyContext} isUiHidden={isUiHidden} wrapperRef={wrapperRef} selectedObject={selectedObject} hideObject={hideObject} />
+         <HideToggler isUiHidden={isUiHidden} hideToggle={hideToggle} />
       </div>
    );
 };

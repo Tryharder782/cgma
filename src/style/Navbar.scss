@@ -11,19 +11,20 @@
    opacity: 1;
    height: 60px;
    z-index: 2;
-   width: 100%;
+   min-width: 1600px;
    display: flex;
    justify-content: center;
    transition: 0.3s ease;
    align-items: center;
    border-bottom: 1px solid gray;
+   font-size: 16px;
 
    .logo{
       display: flex;
       justify-content: center;
       align-items: center;
       font-family: Inter;
-      font-size: 26px;
+      font-size: 1.7em;
       font-weight: normal;
    }
    .navbar{
@@ -53,7 +54,7 @@
                margin: 0 10px;
                width: 80%;
                height: 100%;
-               font-size: 15px;
+               font-size: 1em;
             }
          }
          .searchBarWrapper:hover{
@@ -75,7 +76,7 @@
             margin: 0 20px;
             border-radius: 10px;
             transition: 0.3s ease;
-            font-size: 20px;
+            font-size: 1.2em;
             .link{
                color: black;
                text-decoration: none;
@@ -93,5 +94,20 @@
    opacity: 1;
    nav{
       // transform: translateY(0px);
+   }
+}
+@media screen and (max-width: 1600px) {
+   .navbarWrapper{
+      min-width: 1200px;
+      .logo{
+         font-size: 1.3em;
+      }
+      .navbar{
+         ul{
+            li{
+               font-size: 1em;
+            }
+         }
+      }
    }
 }
