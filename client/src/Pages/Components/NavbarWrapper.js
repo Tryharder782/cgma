@@ -14,11 +14,14 @@ const NavbarWrapper = () => {
          case 'Registration':
             setShowNavbar(false);
             break;
+         case 'Login':
+            setShowNavbar(false);
+            break;
          default:
             setShowNavbar(true)
             break;
       }	
-	}, []);
+	}, [location]);
 
    return (
       <div>
@@ -43,10 +46,17 @@ const NavbarWrapper = () => {
                         <input className="searchBar">
                         </input>
                      </li>
-                     <li className='settings'>
+                     {/* <li className='settings'>
                         <img src="gear.svg" alt="" />
-                     </li>
-                     <li onClick={() => navigate('/Registration')} className='settings'>
+                     </li> */}
+                     <li onClick={() => {
+                        let token = localStorage.getItem('token')
+                        let accessToken = localStorage.getItem('accessToken')
+                        if (!token && !accessToken){
+                           navigate('/Registration')
+                        }
+                        else navigate('/Profile')
+                     }} className='settings'>
                         <img src="account.svg" alt="" />
                      </li>
                      {/* Добавьте дополнительные ссылки для навигации по мере необходимости */}

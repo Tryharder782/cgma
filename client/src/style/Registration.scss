@@ -1,0 +1,408 @@
+@font-face {
+   font-family: JuliusSansOne;
+   src: url(JuliusSansOne-Regular.ttf);
+}
+
+@font-face {
+   font-family: Inter;
+   src: url(Inter-VariableFont_slnt,wght.ttf);
+}
+
+
+.RegistrationWrapper {
+   font-size: 16px;
+   width: 100vw;
+   height: 100vh;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-flow: column;
+   font-family: Inter;
+   position: relative;
+   overflow: hidden;
+
+   .RegistrationContainer {
+      transition: 0.5s ease;
+
+      .title {
+         text-align: center;
+         width: 600px;
+         height: 220px;
+
+         .mainTitle {
+            font-size: 4em;
+            font-family: JuliusSansOne;
+         }
+
+         .page {
+            font-size: 3em;
+            margin: 10px 0;
+         }
+
+         .subText {
+            font-size: 2em;
+         }
+      }
+
+      .inputs {
+         margin: 10px 0;
+         width: 600px;
+         height: 200px;
+         display: flex;
+         flex-flow: column;
+         justify-content: center;
+         align-items: center;
+
+         .row {
+            height: 5.5em;
+            width: 100%;
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            align-items: center;
+
+            .inputName {
+               font-size: 1.5em;
+            }
+
+            .Input {
+               width: 90%;
+               flex-grow: 1;
+               border: 1px solid black;
+               border-radius: 30px;
+
+               .inputComponent {
+                  width: 100%;
+                  height: 100%;
+                  border-radius: inherit;
+
+                  .inputBox {
+                     all: unset;
+                     box-sizing: border-box !important;
+                     padding: 0 20px !important;
+                     display: flex;
+                     width: 100%;
+                     height: inherit;
+                     border-radius: inherit;
+                  }
+               }
+            }
+         }
+
+         .row2 {
+            margin-top: 20px;
+         }
+
+      }
+
+      .links {
+         width: 600px;
+         height: 120px;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         flex-flow: column;
+
+         .row {
+            height: 3em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+         }
+
+         .button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            border: 1px solid black;
+            width: 5em;
+            height: 1.5em;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: 0.3s ease;
+         }
+
+         .button:hover {
+            background: rgba($color: #000000, $alpha: 0.2);
+         }
+
+         .helpLinks {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-flow: row;
+
+            .link {
+               cursor: pointer;
+               margin: 0 10px;
+               text-decoration: underline;
+               transition: 0.3s ease;
+            }
+
+            .link:hover {
+               color: rgba($color: #000000, $alpha: 0.5);
+            }
+         }
+      }
+   }
+
+   .warningWrapper {
+      opacity: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      background: rgba($color: #000000, $alpha: 0.3);
+      transform: translateX(100vw);
+      transition: opacity 0.3s ease;
+      flex-flow: column;
+
+      .warningContainer {
+         display: flex;
+         flex-flow: column;
+         justify-content: center;
+         align-items: center;
+         width: 1000px;
+         padding: 50px;
+         background: white;
+         border-radius: 30px;
+         box-shadow: 0 0 50px 0 rgba($color: #000000, $alpha: 0.6);
+
+         .warningText {
+            text-align: center;
+            font-size: 5em;
+            margin-bottom: 200px;
+
+            .wraningSubText {
+               font-size: 1.5rem;
+            }
+         }
+
+         .confirmButton {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            border: 1px solid black;
+            width: 200px;
+            height: 70px;
+            cursor: pointer;
+            font-size: 3em;
+            transition: 0.3s ease;
+         }
+
+         .confirmButton:hover {
+            background: rgba($color: #000000, $alpha: 0.1);
+            text-shadow: white 1px 0 10px;
+         }
+      }
+   }
+
+   .accessRequestWrapper {
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      transition: transform 0.5s ease;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+
+      transform: translateX(100vw);
+      .accessRequestContainer {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         flex-flow: column;
+         text-align: center;
+
+         .title {
+            .mainTitle {
+               font-size: 3rem;
+            }
+
+            .subTitle {
+               font-size: 1.5rem;
+               margin: 20px 0;
+            }
+         }
+
+         .inputs {
+            margin: 10px 0;
+            width: 1200px;
+            height: 150px;
+            display: flex;
+            flex-flow: row;
+            justify-content: center;
+            align-items: center;
+
+            .row {
+               height: 5em;
+               width: 100%;
+               display: flex;
+               flex-flow: column;
+               justify-content: center;
+               align-items: center;
+
+               .inputName {
+                  font-size: 1.5em;
+               }
+
+               .Input {
+                  width: 90%;
+                  flex-grow: 1;
+                  border: 1px solid white;
+                  border-radius: 30px;
+
+                  .inputComponent {
+                     width: 100%;
+                     height: 100%;
+                     border-radius: inherit;
+
+                     .inputBox {
+                        all: unset;
+                        box-sizing: border-box !important;
+                        padding: 0 20px !important;
+                        display: flex;
+                        width: 100%;
+                        height: inherit;
+                        border-radius: inherit;
+                        font-size: 1.5rem;
+                     }
+                  }
+               }
+            }
+
+
+         }
+
+         .details {
+            .detailsInput {
+               .textarea {
+                  all: unset;
+                  word-break: break-word;
+                  white-space: pre-wrap;
+                  padding: 15px;
+                  text-align: left;
+                  background: rgba($color: #ffffff, $alpha: 0.1);
+                  border-radius: 20px;
+                  font-size: 1.5rem;
+               }
+            }
+         }
+
+         .buttons {
+            display: flex;
+            flex-flow: row;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            margin-top: 20px;
+
+            .button {
+               display: flex;
+               justify-content: center;
+               align-items: center;
+               width: 150px;
+               height: 70px;
+               background: rgba($color: #ffffff, $alpha: 0.2);
+               border-radius: 20px;
+               transition: 0.3s ease;
+               cursor: pointer;
+            }
+
+            .button:hover {
+               background: rgba($color: #ffffff, $alpha: 0.5);
+            }
+
+            .backButton {
+               margin-right: 50px;
+            }
+
+            .locked {
+               color: rgba($color: #ffffff, $alpha: 0.2);
+               pointer-events: none;
+            }
+         }
+      }
+   }
+
+   .tokenWindowWrapper {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      background: rgba($color: #000000, $alpha: 0.3);
+      transition: opacity 0.3s ease;
+      flex-flow: column;
+
+      .tokenWindowContainer {
+         display: flex;
+         flex-flow: column;
+         justify-content: space-around;
+         align-items: center;
+         width: 1000px;
+         height: 500px;
+         padding: 50px;
+         background: white;
+         border-radius: 30px;
+         box-shadow: 0 0 50px 0 rgba($color: #000000, $alpha: 0.6);
+
+         .tokenWindowText {
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 50px;
+
+         }
+         .tokenWindowInput {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            height: 70px;
+            .inputComponent{
+               width: 400px;
+               height: 70px;
+               .inputBox{
+                  box-sizing: border-box;
+                  width: 100%;
+                  height: 100%;
+                  font-size: 2rem;
+                  border-radius: 30px;
+               }
+            }
+         }
+         .buttons{
+            display: flex;
+            flex-flow: row;
+            .button {
+               display: flex;
+               justify-content: center;
+               align-items: center;
+               border-radius: 20px;
+               border: 1px solid black;
+               width: 200px;
+               height: 70px;
+               cursor: pointer;
+               font-size: 3em;
+               transition: 0.3s ease;
+               margin: 0 10px;
+            }
+   
+            .button:hover {
+               background: rgba($color: #000000, $alpha: 0.1);
+               text-shadow: white 1px 0 10px;
+            }
+         }
+      }
+   }
+}

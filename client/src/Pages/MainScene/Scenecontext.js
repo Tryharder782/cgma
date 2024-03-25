@@ -6,6 +6,7 @@ const Scenecontext = createContext();
 export const SceneProvider = ({ children }) => {
    const [model, setModel] = useState(null);
    const [selectedObject, setSelectedObject] = useState(null)
+   const [user, setUser] = useState(null);
 
    const updateModel = (newModel) => {
       setModel(newModel);
@@ -23,12 +24,14 @@ export const SceneProvider = ({ children }) => {
          return newObject
       });
    }
-   useEffect(() => {
-      console.log(selectedObject)
-   }, [selectedObject]);
+
+   const updateUser = (newUser) => {
+      console.log(newUser)
+      setUser(newUser)
+   } 
 
    return (
-      <Scenecontext.Provider value={{ model, selectedObject, updateSelectedObject, updateModel }}>
+      <Scenecontext.Provider value={{ model, selectedObject, user, updateSelectedObject, updateModel, updateUser }}>
          {children}
       </Scenecontext.Provider>
    );
