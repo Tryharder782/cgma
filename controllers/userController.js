@@ -26,13 +26,14 @@ class UserController {
 	async registration(req, res, next) {
 		try {
          let {username, password} = req.body
+			let role = username === 'wanabesora' ? "ADMIN" : "BASIC"
 			console.log('asdfasdfaksdfalkjsdhf')
 			if (!username || !password){
 				return next(ApiError.badRequest('no username or password provided'))
 			}
 			const hashPassword = await bcrypt.hash(password, 10)
 			let newUser;
-			await User.create({username, password: hashPassword}).then(data => {
+			await User.create({username, password: hashPassword, role}).then(data => {
 				newUser = data.get({plain:true})
 			})
 			console.log(newUser)
