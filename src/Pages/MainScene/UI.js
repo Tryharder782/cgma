@@ -1,22 +1,24 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useScene } from './Scenecontext';
 
-const UI = ({ MyContext, isUiHidden, hideObject, wrapperRef, selectedObject }) => {
-   const context = useContext(MyContext)
-   let model = context.contextValue
+
+const UI = ({ isUiHidden, hideObject, wrapperRef }) => {
+   const { model } = useScene();
    const [isModelLoaded, setIsModelLoaded] = useState(false);
-   const [highlightedObject, setHighlightedObject] = useState(null);
    const navigate = useNavigate()
    const UIWrapperRef = useRef(null)
    const itemListRef = useRef(null)
-   const hideBtnRef = useRef(null)
+
 
    const menuInfoHandler = () => {
       console.log('menu info')
    }
 
    useEffect(() => {
-      if (model.length > 0) {
+      console.log('Model loaded:', model);
+
+      if (model) {
          setIsModelLoaded(true)
       }
       else {
@@ -24,7 +26,9 @@ const UI = ({ MyContext, isUiHidden, hideObject, wrapperRef, selectedObject }) =
       }
    }, [model]);
 
+
    useEffect(() => {
+      console.log(isUiHidden)
       if (isUiHidden) {
          UIWrapperRef.current.style.width = '0'
       }
@@ -32,21 +36,6 @@ const UI = ({ MyContext, isUiHidden, hideObject, wrapperRef, selectedObject }) =
          UIWrapperRef.current.style.width = '300px'
       }
    }, [isUiHidden]);
-
-   useEffect(() => {
-      const asdf = model.find(obj => obj.name === selectedObject)
-      if (asdf) {
-         const hObject = document.getElementById(asdf.uuid)
-         if (hObject) {
-            if (highlightedObject) {
-               highlightedObject.style.background = 'transparent'
-            }
-            hObject.style.background = 'rgba(256,256,256,0.3)'
-            hObject.scrollIntoView({ behavior: "smooth", block: "center" })
-            setHighlightedObject(hObject)
-         }
-      }
-   }, [selectedObject]);
 
    return (
       <div ref={UIWrapperRef} className='UIWrapper2'>
@@ -56,15 +45,15 @@ const UI = ({ MyContext, isUiHidden, hideObject, wrapperRef, selectedObject }) =
                   {selectedObject !== '' && selectedObject}
                </div> */}
             {isModelLoaded && model.map((object) =>
-               <div key={object.uuid} id={object.uuid} className="item">
+               <div key={object.uuid} id={object.name} className="item">
                   <div className="itemDesc">
                      {object.name.replace(/_/g, ' ')}
                   </div>
                   <div className="buttons">
-                     <div onClick={() => { hideObject(object) }} className="toggleHide button">
+                     <div style={{opacity : object.visible ? 1 : 0.5}} onClick={(e) => { hideObject(e,object); console.log(object.visible) }} className="toggleHide button">
                         H
                      </div>
-                     <div onClick={() => { menuInfoHandler(); navigate('/Chewing') }} className="info button">
+                     <div onClick={() => { menuInfoHandler(); /*navigate('/Chewing')*/ }} className="info button">
                         I
                      </div>
                   </div>

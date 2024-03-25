@@ -7,19 +7,24 @@ import './style/Navbar.scss'
 import Contacts from './Pages/Contacts/Contacts';
 import About from './Pages/About/About';
 import ChewingMuscle from './Pages/Chewing/ChewingMuscle';
+import { SceneProvider } from './Pages/MainScene/Scenecontext';
+import Registration from './Pages/Registration/Registration';
 
 function App() {
     return (
+        <SceneProvider>
         <Router>
             <NavbarWrapper />
             <Routes>
-                <Route path="/" element={<CubeSceneWrapper />} />
+                <Route path="/Main" element={<CubeSceneWrapper />} />
                 <Route path="/Chewing" element={<ChewingMuscle />} />
                 <Route path="/About" element={<About />} />
                 <Route path="/Contacts" element={<Contacts />} />
+                <Route path="/Registration" element={<Registration />} />
                 {/* Добавьте дополнительные маршруты здесь */}
             </Routes>
         </Router>
+        </SceneProvider>
     );
 }
 

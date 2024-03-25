@@ -1,44 +1,102 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
 import CubeScene from './CubeScene';
 import UIWrapper from './UIWrapper';
-const MyContext = React.createContext();
+import { context } from '@react-three/fiber';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { SceneProvider, useScene } from './Scenecontext';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+
 
 const CubeSceneWrapper = () => {
+   const { updateModel } = useScene();
    const selectedObjectTabRef = useRef(null)
-   const [contextValue, setContextValue] = useState([]);
-   const [selectedObject, setSelectedObject] = useState('');
-   let model = [];
+   const selectedObject = useRef('')
 
-   const hideObject = (objectPassed, modelToIterate) => {
-      const objectToHide = modelToIterate.find(obj => obj.name === objectPassed.name)
-   }
+   const sceneRef = useRef(new THREE.Scene())
+   // console.log(sceneRef)
+
+   const modelRef = useRef(null); // Add this line
+   const isModelLoadedRef = useRef(false);
    
-   const updateContextValue = (newValue) => {
-      setContextValue(newValue);
-   };
+   // const geometry = new THREE.PlaneGeometry(5, 5); // Width and height of the plane
+   // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide }); // Green plane
+   // const plane = new THREE.Mesh(geometry, material);
+   // plane.rotation.x = -Math.PI / 2; // Rotate to lay flat
+   // sceneRef.current.add(plane); // Assuming you have a `scene` object already created
 
-   useEffect(() => {
-      if (selectedObjectTabRef){
-         selectedObjectTabRef.current.style.transition = '0.5s ease'
-         selectedObjectTabRef.current.style.opacity = 1
-         setTimeout(() => {
-            selectedObjectTabRef.current.style.transition = '2s ease'
-            selectedObjectTabRef.current.style.opacity = 0
-         }, 5000)
+   const addLights = () => {
+      if (sceneRef.current) {
+         const light = new THREE.DirectionalLight(0xffffff, 1);
+         light.position.set(-2, 0, 0);
+         const light2 = new THREE.DirectionalLight(0xffffff, 1);
+         light2.position.set(2, 0, 0);
+         const light3 = new THREE.DirectionalLight(0xffffff, 1);
+         light3.position.set(0, 2, 0);
 
+         sceneRef.current.add(light);
+         sceneRef.current.add(light2);
+         sceneRef.current.add(light3);
       }
-   }, [selectedObject]);
+   }
+   // Загрузка модели
+   const loadModel = () => {
+      if (sceneRef.current) {
+         console.log(sceneRef.current)    
+         const loader = new GLTFLoader();
+         const dracoLoader = new DRACOLoader();
+         dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.4.1/');
+         loader.setDRACOLoader(dracoLoader);
+         console.log('loadModel')
+         loader.load('skull.gltf', (gltf) => {
+            updateModel(gltf.scene.children)
+            modelRef.current = gltf.scene
+            sceneRef.current.add(modelRef.current)
+            
+            // sceneRef.current.children.filter(obj => obj instanceof THREE.Group)[0].children.filter(obj => obj.name === 'нижняя_челюсть')[0].visible = false
+            // setModel(gltf.scene.children)
+            // console.log(sceneRef.current)
+            isModelLoadedRef.current = true;
+         }, undefined, (error) => {
+            console.error(error);
+         });
+      }
+   };
+   const hideModel = (e, target) => {
+      console.log(modelRef.current.children.find(obj => obj.name === target.name))
+      const objectToChange = modelRef.current.children.find(obj => obj.name === target.name)
+      objectToChange.visible = !objectToChange.visible
+      console.log(e.target.style)
+      e.target.style.opacity = objectToChange.visible ? 1 : 0.5
+   }
+   useEffect(() => {
+      if (sceneRef.current.children.filter(obj => obj instanceof THREE.Group)) {
+         addLights();
+         loadModel();
+      }
+   }, []);
+   
+
 
    return (
-      <MyContext.Provider value={{ contextValue, updateContextValue }}>
+      // Adjust the Scenecontext.Provider in your return statement
+      <div className="idk">
          <div className='CubeSceneWrapper'>
-            <UIWrapper hideObject={hideObject} MyContext={MyContext} selectedObject={selectedObject} />
-            <CubeScene setSelectedObject={setSelectedObject} />
+            <UIWrapper hideObject={hideModel}  />
+            <CubeScene refs={{
+               sceneRef,
+               modelRef,
+               isModelLoadedRef,
+               selectedObject,
+               selectedObjectTabRef,
+            }} />
          </div>
-         <div ref={selectedObjectTabRef} className="selectedObject">{selectedObject.replace(/_/g, ' ')}</div>
-      </MyContext.Provider>
+         <div className="selectedObjectWrapper">
+            <div ref={selectedObjectTabRef} className="selectedObject"></div>
+         </div>
+      </div>
    );
 };
 
 export default CubeSceneWrapper;
-export const useMyContext = () => useContext(MyContext);

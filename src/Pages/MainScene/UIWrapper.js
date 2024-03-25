@@ -2,8 +2,8 @@ import React, { useContext, useRef, useState } from 'react';
 import UI from './UI';
 import HideToggler from './HideToggler';
 
-const UIWrapper = ({hideObject, MyContext, selectedObject}) => {
-   const [isUiHidden, setIsUiHidden] = useState(false);
+const UIWrapper = ({ hideObject, selectedObject}) => {
+   const [isUiHidden, setIsUiHidden] = useState(true);
    const wrapperRef = useRef(null)
 
    const hideToggle = () => {
@@ -11,7 +11,7 @@ const UIWrapper = ({hideObject, MyContext, selectedObject}) => {
    }
    return (
       <div ref = {wrapperRef} className='UIWrapper'>
-         <UI MyContext={MyContext} isUiHidden={isUiHidden} wrapperRef={wrapperRef} selectedObject={selectedObject} hideObject={hideObject} />
+         <UI isUiHidden={isUiHidden} wrapperRef={wrapperRef} hideObject={hideObject} />
          <HideToggler isUiHidden={isUiHidden} hideToggle={hideToggle} />
       </div>
    );
