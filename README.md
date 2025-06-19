@@ -4,6 +4,7 @@ A proof-of-concept project designed to showcase an interactive 3D viewer within 
 
 ![Project Demo GIF](demo.gif)
 
+All of the development stages, including 3d modeling and design, was made by me
 ---
 
 ## Key Technical Features
