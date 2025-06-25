@@ -172,15 +172,30 @@ class UserController {
 	// }
 
 	
-	async checkPassword (req,res,next){
-		try {
-			const {inputPass, userId} = req.body
-			const password = await UserInfo.findOne({where: {userId}, attributes: ['password']})
-			return res.json(bcrypt.compareSync(inputPass, password.get('password')))
-		} catch (error) {
-			return next(ApiError.internal(error))
-		}
-	}
+        async checkPassword (req,res,next){
+                try {
+                        const {inputPass, userId} = req.body
+                        const password = await UserInfo.findOne({where: {userId}, attributes: ['password']})
+                        return res.json(bcrypt.compareSync(inputPass, password.get('password')))
+                } catch (error) {
+                        return next(ApiError.internal(error))
+                }
+        }
+
+        async guest(req, res, next) {
+                try {
+                        const guestUser = {
+                                id: 0,
+                                username: 'guest',
+                                role: 'GUEST',
+                                tokenVersion: 0,
+                        }
+                        const token = generateJwt(guestUser)
+                        return res.json({ token })
+                } catch (error) {
+                        return next(ApiError.internal(error))
+                }
+        }
 	// async getUser (req, res, next){
 	// 	try {
 	// 		const userId = req.params.id

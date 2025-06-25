@@ -9,9 +9,15 @@ export const registration = async(user) => {
 }
 
 export const login = async(user) => {
-	const {data} = await $host.post('/api/users/login', user)
-	localStorage.setItem('token', data.token)
-	return jwtDecode(data.token)
+        const {data} = await $host.post('/api/users/login', user)
+        localStorage.setItem('token', data.token)
+        return jwtDecode(data.token)
+}
+
+export const loginGuest = async() => {
+        const {data} = await $host.post('/api/users/guest')
+        localStorage.setItem('token', data.token)
+        return jwtDecode(data.token)
 }
 
 export const check = async() => {
