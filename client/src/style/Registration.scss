@@ -1,4 +1,8 @@
 @font-face {
+   font-family: Hero;
+   src: url(ofont.ru_Hero.ttf);
+ }
+@font-face {
    font-family: JuliusSansOne;
    src: url(JuliusSansOne-Regular.ttf);
 }
@@ -17,7 +21,7 @@
    justify-content: center;
    align-items: center;
    flex-flow: column;
-   font-family: Inter;
+   font-family: Hero;
    position: relative;
    overflow: hidden;
 
@@ -27,11 +31,13 @@
       .title {
          text-align: center;
          width: 600px;
-         height: 220px;
+         height: 260px;
 
          .mainTitle {
-            font-size: 4em;
-            font-family: JuliusSansOne;
+            font-size: 3em;
+            font-family: Hero;
+            font-weight: bold;
+            
          }
 
          .page {
@@ -308,7 +314,7 @@
                display: flex;
                justify-content: center;
                align-items: center;
-               width: 150px;
+               padding: 10px 20px;
                height: 70px;
                background: rgba($color: #ffffff, $alpha: 0.2);
                border-radius: 20px;
@@ -381,7 +387,7 @@
                }
             }
          }
-         .buttons{
+         .buttons{   
             display: flex;
             flex-flow: row;
             .button {
@@ -393,7 +399,7 @@
                width: 200px;
                height: 70px;
                cursor: pointer;
-               font-size: 3em;
+               font-size: 1.5em;
                transition: 0.3s ease;
                margin: 0 10px;
             }

@@ -133,19 +133,19 @@ const Registration = ({ }) => {
       <div className='RegistrationWrapper'>
          <div ref={stepOneRef} className="RegistrationContainer">
             <div className="title">
-               <div className="mainTitle">Gnathology</div>
-               <div className="page">{!isLoginPage ? "Registration" : "Login"}</div>
-               <div className="subText">{!isLoginPage ? "Welcome, new user!" : "Welcome back!"}</div>
+               <div className="mainTitle">Кладовая знаний по гнатологии</div>
+               <div className="page">{!isLoginPage ? "Регистрация" : "Логин"}</div>
+               <div className="subText">{!isLoginPage ? "Добро пожаловать!" : "С возвращением!"}</div>
             </div>
             <div className="inputs">
                <div className="row1 row">
-                  <div className="inputName">Username</div>
+                  <div className="inputName">Логин</div>
                   <div className="Input username">
                      <Input type={'text'} text={usernameText} setText={setUsernameText} />
                   </div>
                </div>
                <div className="row2 row">
-                  <div className="inputName">Password</div>
+                  <div className="inputName">Пароль</div>
                   <div className="Input password">
                      <Input type={'password'} text={passwordText} setText={setPasswordText} />
                   </div>
@@ -153,12 +153,12 @@ const Registration = ({ }) => {
             </div>
             <div className="links">
                <div className="row row1">
-                  <div onClick={nextButtonHandler} className="button linksButton">{!isLoginPage ? 'next' : 'Login'}</div>
+                  <div onClick={nextButtonHandler} className="button linksButton">{!isLoginPage ? 'Далее' : 'Вход'}</div>
                </div>
                <div className="row row2">
                   <div className="helpLinks">
-                     <div onClick={() => navigate(isLoginPage ? '/Registration' : '/Login')} className="link">{isLoginPage ? 'Don\'t have an account? register' : 'Have an account? Log in'}</div>
-                     <div onClick={(toggleTokenWindowHide)} className="link">Insert token here</div>
+                     <div onClick={() => navigate(isLoginPage ? '/Registration' : '/Login')} className="link">{isLoginPage ? 'Нет аккаунта? Регистрация' : 'Уже есть акканут? Вход'}</div>
+                     <div onClick={(toggleTokenWindowHide)} className="link">Вход по токену доступа</div>
                   </div>
                </div>
             </div>
@@ -166,31 +166,31 @@ const Registration = ({ }) => {
          <div ref={warningRef} className="warningWrapper">
             <div className="warningContainer">
                <div className="warningText">
-                  Wraning!
+                  Предупреждение
                   <div className="wraningSubText">
                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, velit! Aspernatur non suscipit repudiandae reprehenderit est similique deleniti cumque hic voluptas nihil, itaque alias laudantium omnis vitae corporis, rem doloremque assumenda sequi nobis laborum quae dolore quo? Optio consectetur fugiat labore, ipsa cupiditate tenetur soluta, rerum beatae iure, praesentium magnam.
                   </div>
                </div>
                <div onClick={confirmButtonHandler} className="confirmButton">
-                  confirm
+                  принять
                </div>
             </div>
          </div>
          <div ref={stepTwoRef} className='accessRequestWrapper'>
             <div className="accessRequestContainer">
                <div className="title">
-                  <div className="mainTitle">Access Request</div>
-                  <div className="subTitle">In order to gain access to this site, you need to make a request to the administraion</div>
+                  <div className="mainTitle">Запросить доступ</div>
+                  <div className="subTitle">Для того, чтобы получить доступ к материалам этого сайта, вам необходимо обратиться к администрации</div>
                </div>
                <div className="inputs">
                   <div className="row1 row">
-                     <div className="inputName">First name</div>
+                     <div className="inputName">Имя</div>
                      <div className="Input username">
                         <Input type={'text'} text={name} setText={setName} />
                      </div>
                   </div>
                   <div className="row2 row">
-                     <div className="inputName">Second name</div>
+                     <div className="inputName">Фамилия</div>
                      <div className="Input password">
                         <Input type={'text'} text={surname} setText={setSurname} />
                      </div>
@@ -198,19 +198,19 @@ const Registration = ({ }) => {
                </div>
                <div className="details">
                   <div className="detailsInput">
-                     <textarea placeholder='Details here...' className='textarea' wrap={'hard'} name="details" id="details" cols="90" rows="13" value={detailsInput} onChange={e => setDetailsInput(e.value)}></textarea>
+                     <textarea placeholder='Детали здесь...' className='textarea' wrap={'hard'} name="details" id="details" cols="90" rows="13" value={detailsInput} onChange={e => setDetailsInput(e.value)}></textarea>
                   </div>
                </div>
                <div className="buttons">
-                  <div onClick={() => setRegStep(1)} className="backButton button">Back</div>
-                  <div onClick={submithandler} className={`submitButton button ${name === '' || surname === '' || usernameText === '' || passwordText === '' ? 'locked' : ''}`}> Submit</div>
+                  <div onClick={() => setRegStep(1)} className="backButton button">Назад</div>
+                  <div onClick={submithandler} className={`submitButton button ${name === '' || surname === '' || usernameText === '' || passwordText === '' ? 'locked' : ''}`}> Отправить</div>
                </div>
             </div>
          </div>
          <div ref={tokenWindowRef} className="tokenWindowWrapper">
             <div className="tokenWindowContainer">
                <div className="tokenWindowText">
-                  Insert access token here:
+                  Введите токен доступа:
                </div>
                <div className="tokenWindowInput">
                   <Input type={'text'} text={tokenInputText} setText={setTokenInputText} />
@@ -218,10 +218,10 @@ const Registration = ({ }) => {
 
                <div className="buttons">
                   <div onClick={toggleTokenWindowHide} className="hideButton button">
-                     hide
+                     закрыть
                   </div>
                   <div onClick={submitAccessToken} className="submitButton button">
-                     submit
+                     подтвердить
                   </div>
                </div>
 

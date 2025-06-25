@@ -6,6 +6,11 @@
    font-family: Inter;
    src: url(Inter-VariableFont_slnt,wght.ttf);
  }
+ @font-face {
+   font-family: Hero;
+   src: url(ofont.ru_Hero.ttf);
+ }
+
 
 .navbarWrapper{
    opacity: 1;
@@ -18,14 +23,16 @@
    align-items: center;
    border-bottom: 1px solid gray;
    font-size: 16px;
+   font-family: Hero;
+
 
    .logo{
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: Inter;
+      font-family: Hero;
       font-size: 1.7em;
-      font-weight: normal;
+      font-weight: Bold;
    }
    .navbar{
       display: flex;
@@ -35,7 +42,7 @@
       transform: translateY(0px);
       transition: 0.3s ease;
       background: transparent;
-      font-family: JuliusSansOne;
+      font-family: Hero;
       ul{
          justify-content: space-around;
          display: flex;
@@ -78,6 +85,7 @@
             transition: 0.3s ease;
             font-size: 1.2em;
             .link{
+               font-weight: bold;
                text-align: center;
                color: black;
                text-decoration: none;

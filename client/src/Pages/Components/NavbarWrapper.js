@@ -27,20 +27,20 @@ const NavbarWrapper = () => {
       <div>
          {showNavbar &&
             <div className="navbarWrapper">
-               <div className="logo">Gnathology</div>
+               <div className="logo">Кладовая знаний по гнатологии</div>
                <nav className='navbar'>
                   <ul>
                      <li onClick={() => navigate('/Main')}>
-                        <div className='link'>HOME</div>
+                        <div className='link'>Главная</div>
                      </li>
                      <li onClick={() => navigate('/About')}>
-                        <div className='link'>TO STUDENTS</div>
+                        <div className='link'>Студентам  </div>
                      </li>
                      <li onClick={() => navigate('/Contacts')}>
-                        <div className='link'>TO PROFESSORS</div>
+                        <div className='link'>Профессорам</div>
                      </li>
                      <li onClick={() => navigate('/Contacts')}>
-                        <div className='link'>CONTACTS</div>
+                        <div className='link'>Связаться с нами</div>
                      </li>
                      <li className='searchBarWrapper'>
                         <input className="searchBar">

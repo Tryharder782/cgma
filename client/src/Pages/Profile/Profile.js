@@ -44,13 +44,13 @@ const Profile = ({}) => {
    return (
       <div className='profileWrapper'>
          <div className="profileContainer">
-            <h2 className="page">Profile</h2>
+            <h2 className="page">Профиль</h2>
             
             <div className="row row1">
                <div className="username">
-                  username
+                  Логин
                </div>
-               <div className="value"> {user && user.username}</div>
+               <div className="value"> {user && user.username || "(ваше имя)"}</div>
                {user &&  user.role === "ADMIN" && <div>
                   <div className="createToken">
                      access token
@@ -58,7 +58,7 @@ const Profile = ({}) => {
                   <div className="value"> {lastAccessToken}</div>
                   <div onClick={createAccessTokenHandler} className="createTokenButton">create token</div>
                </div>}
-               <div onClick={logout} className="logoutButton">Log out</div>
+               <div onClick={logout} className="logoutButton">Выйти  </div>
             </div>
             
          </div>

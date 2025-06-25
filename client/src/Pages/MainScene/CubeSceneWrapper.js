@@ -56,10 +56,14 @@ const CubeSceneWrapper = () => {
          light2.position.set(2, 0, 0);
          const light3 = new THREE.DirectionalLight(0xffffff, 1);
          light3.position.set(0, 2, 0);
+         const light4 = new THREE.DirectionalLight(0xffffff, 1);
+         light3.position.set(0, -2, 0);
 
          sceneRef.current.add(light);
          sceneRef.current.add(light2);
          sceneRef.current.add(light3);
+         sceneRef.current.add(light4);
+         
       }
    }
    // Загрузка модели
