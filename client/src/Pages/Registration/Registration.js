@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import '../../style/Registration.scss'
 import Input from './../Components/Input';
-import { login, registration } from './../../http/userApi';
+import { login, registration, loginGuest } from './../../http/userApi';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useScene } from '../MainScene/Scenecontext';
 import { checkToken } from '../../http/accessTokenApi';
@@ -49,6 +49,12 @@ const Registration = ({ }) => {
       if (localStorage.getItem('accessToken')){
          navigate('/Main')
       }
+   }
+
+   const guestLoginHandler = async () => {
+      const data = await loginGuest()
+      updateUser(data)
+      navigate('/Main')
    }
    
    const nextButtonHandler = () => {
@@ -159,6 +165,7 @@ const Registration = ({ }) => {
                   <div className="helpLinks">
                      <div onClick={() => navigate(isLoginPage ? '/Registration' : '/Login')} className="link">{isLoginPage ? 'Нет аккаунта? Регистрация' : 'Уже есть акканут? Вход'}</div>
                      <div onClick={(toggleTokenWindowHide)} className="link">Вход по токену доступа</div>
+                     <div onClick={guestLoginHandler} className="link">Войти как гость</div>
                   </div>
                </div>
             </div>
@@ -168,7 +175,7 @@ const Registration = ({ }) => {
                <div className="warningText">
                   Предупреждение
                   <div className="wraningSubText">
-                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, velit! Aspernatur non suscipit repudiandae reprehenderit est similique deleniti cumque hic voluptas nihil, itaque alias laudantium omnis vitae corporis, rem doloremque assumenda sequi nobis laborum quae dolore quo? Optio consectetur fugiat labore, ipsa cupiditate tenetur soluta, rerum beatae iure, praesentium magnam.
+                     Используя материалы данного сайта, вы подтверждаете, что они предназначены исключительно для ознакомительных и учебных целей. Автор проекта не несёт ответственности за возможное неверное применение информации.
                   </div>
                </div>
                <div onClick={confirmButtonHandler} className="confirmButton">
