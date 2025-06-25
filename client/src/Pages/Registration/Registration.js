@@ -165,7 +165,7 @@ const Registration = ({ }) => {
                   <div className="helpLinks">
                      <div onClick={() => navigate(isLoginPage ? '/Registration' : '/Login')} className="link">{isLoginPage ? 'Нет аккаунта? Регистрация' : 'Уже есть акканут? Вход'}</div>
                      <div onClick={(toggleTokenWindowHide)} className="link">Вход по токену доступа</div>
-                     <div onClick={guestLoginHandler} className="link">Войти как гость</div>
+                     <div onClick={guestLoginHandler} className="link">Войти как гость / Enter as a guest</div>
                   </div>
                </div>
             </div>
