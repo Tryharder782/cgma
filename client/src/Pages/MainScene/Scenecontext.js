@@ -11,24 +11,15 @@ export const SceneProvider = ({ children }) => {
    const updateModel = (newModel) => {
       setModel(newModel);
    };
-   const updateSelectedObject = (newObject, ) => {
-      console.log(selectedObject)
+   const updateSelectedObject = (newObject) => {
       console.log("updateSelectedObject", newObject);
-      setSelectedObject(prev => {
-         if (prev){
-            document.getElementById(prev.name).style.background = 'transparent'
-         }
-         const newElement = document.getElementById(newObject.name)
-         newElement.style.background = 'rgba(256,256,256,0.3)'
-         newElement.scrollIntoView({behavior: 'smooth', block: 'center'})
-         return newObject
-      });
+      setSelectedObject(newObject);
    }
 
    const updateUser = (newUser) => {
       console.log(newUser)
       setUser(newUser)
-   } 
+   }
 
    return (
       <Scenecontext.Provider value={{ model, selectedObject, user, updateSelectedObject, updateModel, updateUser }}>

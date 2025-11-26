@@ -1,255 +1,294 @@
 @font-face {
-   font-family: Hero;
-   src: url(ofont.ru_Hero.ttf);
- }
+   font-family: 'Inter';
+   src: url(Inter-VariableFont_slnt,wght.ttf);
+}
 
 #root {
    display: flex;
    flex-flow: column;
    height: 100vh;
-   font-family: Hero;
+   font-family: 'Inter', sans-serif;
+   background-color: #121212;
+   color: #ffffff;
 
    .idk {
       display: flex;
       flex-grow: 1;
+      position: relative;
+      overflow: hidden;
+
       .CubeSceneWrapper {
          z-index: 1;
          display: flex;
          flex-grow: 1;
          height: 100%;
+         width: 100%;
 
          .CubeScene {
-            overflow: hidden;
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-grow: 1;
-            z-index: -3;
+            width: 100%;
+            height: 100%;
             position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
 
             canvas {
-               top: 0;
-               z-index: 2;
-               left: 0;
                width: 100%;
-               margin: 0 auto;
+               height: 100%;
+               outline: none;
             }
          }
 
          .UIWrapper {
-            transition: 0.3s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            z-index: 10;
             display: flex;
-            position: relative;
-            color: white;
-            z-index: 1;
-
-            justify-content: center;
+            pointer-events: none; /* Let clicks pass through wrapper to canvas where UI is not present */
 
             .UIWrapper2 {
+               pointer-events: auto; /* Re-enable clicks for the sidebar */
+               width: 350px;
+               height: 100%;
+               background: rgba(20, 20, 20, 0.85);
+               backdrop-filter: blur(10px);
+               border-right: 1px solid rgba(255, 255, 255, 0.1);
+               display: flex;
+               flex-direction: column;
+               transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), width 0.3s ease, opacity 0.3s ease;
+               overflow: hidden;
                position: relative;
-               width: 300px;
-               transition: 0.3s ease;
-               overflow-x: hidden;
-               background: rgba($color: #000000, $alpha: 0.9);
 
-               .List {
-                  box-sizing: border-box;
-                  padding: 10px;
-                  position: relative;
-                  transition: 0.3s ease;
+               .tabs {
                   display: flex;
-                  justify-content: space-between;
-                  flex-flow: column;
-                  background: none;
-                  width: 100%;
-                  max-height: calc(100vh - 61px);
-                  overflow-y: scroll;
-                  border-radius: 10px; 
-                  align-items: center;
+                  background: #141414;
+                  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                  flex-shrink: 0;
 
-                  .item {
-                     display: flex;
-                     flex-flow: row;
-                     width: 100%;
-                     justify-content: space-between;
-                     align-items: center;
-                     border-radius: 15px;
-                     transition: 0.5s ease;
+                  .tab-button {
+                     flex: 1;
+                     padding: 15px;
+                     background: transparent;
+                     border: none;
+                     color: #888;
+                     font-size: 0.9rem;
+                     font-weight: 600;
+                     text-transform: uppercase;
+                     letter-spacing: 1px;
+                     cursor: pointer;
+                     transition: all 0.2s ease;
+                     border-bottom: 2px solid transparent;
 
-                     .itemDesc {
-                        margin-left: 10px;
-                        max-width: 220px;
-                        word-break: break-word;
-                        max-height: 60px;
+                     &:hover {
+                        color: #fff;
+                        background: rgba(255, 255, 255, 0.05);
                      }
 
-                     .buttons {
-                        border-radius: 10px;
-                        margin: 5px 0;
-                        height: 50px;
-                        width: 50px;
-                        background: transparent;
-                        display: flex;
-                        justify-content: space-around;
-                        align-items: center;
-                        position: relative;
-                        cursor: pointer;
-                        transition: 0.3s ease;
-
-                        .button {
-                           display: flex;
-                           justify-content: center;
-                           align-items: center;
-                           width: 30px;
-                           height: 30px;
-                           border-radius: 5px;
-                        }
-
-                        .button:hover {
-                           background: rgba($color: #fff, $alpha: 0.2);
-                        }
-
-                        .toggleHide {}
+                     &.active {
+                        color: #61dafb;
+                        border-bottom: 2px solid #61dafb;
+                        background: rgba(255, 255, 255, 0.05);
                      }
-
-                     .buttons:hover {}
-                  }
-
-                  .buttonWrapper {
-                     display: flex;
-                     width: 50px;
-                     height: 15px;
-
-                     .hideMenu {
-                        cursor: pointer;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        border-radius: 10px 10px 0 0;
-                        padding: 0;
-                        position: absolute;
-                        background: #fff;
-                        font-size: 13px;
-                        color: black;
-                        width: 50px;
-                        height: 15px;
-                        transition: 0.3s ease;
-                     }
-
-                     .hideMenu:hover {
-                        opacity: 0.5;
-                     }
-                  }
-               }  
-               .selectedObjectOverview{
-                  top: 0;
-                  left: 0;
-                  box-sizing: border-box;
-                  padding: 10px;
-                  position: absolute;
-                  transition: 0.3s ease;
-                  display: flex;
-                  justify-content: space-between;
-                  flex-flow: column;
-                  background: black;
-                  width: 400px;
-                  height: calc(100vh - 61px);
-                  margin-bottom: 100px;
-                  align-items: center;
-                  .image{
-                     display: flex;justify-content: center;
-                     align-items: center;
-                     max-width: 400px;
-                     max-height: 400px;   
-                  }
-                  .text{
-                     background: #000;
-                     line-height: 2;
-                     padding: 0 0 50px ;
                   }
                }
-               .buttons{
+
+               .tab-content {
+                  flex-grow: 1;
+                  overflow: hidden;
                   display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  flex-flow: row;
-                  position: fixed;
-                  bottom: 0;
-                  left: 0px;
-                  height: 40px;
-                  width: 380px;
-                  .button{
-                     transition: 0.3s ease;
-                     cursor: pointer;
-                     display: flex;
-                     border: 1px solid white;
-                     border-radius: 10px 10px 0 0 ;
-                     justify-content: center;
-                     align-items: center;
-                     height: 100%;
-                     width: 50%;
-                     background: #000;
+                  flex-direction: column;
+                  position: relative;
+
+                  .List {
+                     padding: 20px;
+                     overflow-y: auto;
+                     flex-grow: 1;
+                     
+                     /* Scrollbar styling */
+                     &::-webkit-scrollbar {
+                        width: 6px;
+                     }
+                     &::-webkit-scrollbar-track {
+                        background: transparent;
+                     }
+                     &::-webkit-scrollbar-thumb {
+                        background: rgba(255, 255, 255, 0.2);
+                        border-radius: 3px;
+                     }
+
+                     .item {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        padding: 12px;
+                        margin-bottom: 8px;
+                        background: rgba(255, 255, 255, 0.05);
+                        border-radius: 8px;
+                        transition: background 0.2s ease;
+                        cursor: pointer;
+
+                        &:hover {
+                           background: rgba(255, 255, 255, 0.1);
+                        }
+
+                        &.selected {
+                           background: rgba(97, 218, 251, 0.15);
+                           border: 1px solid rgba(97, 218, 251, 0.3);
+                           
+                           .itemDesc {
+                              color: #61dafb;
+                           }
+                        }
+
+                        .itemDesc {
+                           font-size: 0.9rem;
+                           font-weight: 500;
+                           color: #e0e0e0;
+                           text-transform: capitalize;
+                           flex-grow: 1;
+                        }
+
+                        .buttons {
+                           display: flex;
+                           gap: 8px;
+
+                           .button {
+                              width: 32px;
+                              height: 32px;
+                              border-radius: 6px;
+                              display: flex;
+                              justify-content: center;
+                              align-items: center;
+                              cursor: pointer;
+                              background: rgba(255, 255, 255, 0.1);
+                              transition: all 0.2s ease;
+                              font-size: 1rem;
+
+                              &:hover {
+                                 background: rgba(255, 255, 255, 0.2);
+                                 transform: scale(1.05);
+                              }
+                           }
+                        }
+                     }
                   }
-                  .button:hover{
-                     background: rgba($color: rgb(71, 71, 71), $alpha: 1);
+
+                  .selectedObjectOverview {
+                     width: 100%;
+                     height: 100%;
+                     background: transparent;
+                     padding: 20px;
+                     box-sizing: border-box;
+                     overflow-y: auto;
+                     
+                     .no-selection, .no-info {
+                        color: #888;
+                        text-align: center;
+                        margin-top: 40px;
+                        font-style: italic;
+                     }
+
+                     .selectedObjectOverviewWrapper {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 20px;
+
+                        .image {
+                           width: 100%;
+                           height: auto;
+                           border-radius: 8px;
+                           object-fit: cover;
+                           background: #000;
+                        }
+
+                        .text {
+                           color: #d0d0d0;
+                           font-size: 0.95rem;
+                           line-height: 1.6;
+
+                           h3 {
+                              color: #fff;
+                              margin-top: 0;
+                              font-size: 1.4rem;
+                              border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                              padding-bottom: 10px;
+                           }
+
+                           h4 {
+                              color: #61dafb;
+                              margin-bottom: 8px;
+                              margin-top: 16px;
+                           }
+                           
+                           .link {
+                              color: #61dafb;
+                              margin-top: 10px;
+                              cursor: pointer;
+                              text-decoration: underline;
+                              font-size: 0.9rem;
+                              
+                              &:hover {
+                                 color: #fff;
+                              }
+                           }
+                        }
+                     }
                   }
                }
             }
 
             .hideToggler {
-               width: 50px;
-               margin-left: 10px;
-               font-size: 2em;
-               color: rgba($color: #000000, $alpha: 0.6);
-               display: flex;
-               justify-content: center;
-               align-items: center;
-               transition: 0.3s ease;
-
+               pointer-events: auto;
+               position: absolute;
+               left: 100%; /* Position right next to the sidebar */
+               top: 50%;
+               transform: translateY(-50%);
+               margin-left: 0; /* Reset margin */
+               
                .button {
+                  width: 30px;
+                  height: 60px;
+                  background: rgba(20, 20, 20, 0.85);
+                  backdrop-filter: blur(5px);
+                  border-radius: 0 10px 10px 0;
                   display: flex;
                   justify-content: center;
                   align-items: center;
-                  height: 50px;
-                  width: 50px;
                   cursor: pointer;
-                  transition: all 0.3s ease;
-                  border-radius: 10px;
-                  user-select: none;
-               }
-
-               .button:hover {
-
-                  color: rgba($color: #000000, $alpha: 0.2);
+                  color: #fff;
+                  font-weight: bold;
+                  transition: background 0.2s ease;
+                  
+                  &:hover {
+                     background: rgba(60, 60, 60, 0.9);
+                  }
                }
             }
          }
-
-
       }
-      .selectedObjectWrapper{
-         color: white;
-         position: absolute;
-         background: transparent;
-         top: 70px;
-         left: 300px;
-         margin: 0 auto;
-         z-index: 3;
-         width: 70%;
-         height: 70px;
-         display: flex;
-         justify-content: center;
-         align-items: center;
-         .selectedObject {
-            opacity: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 15px;
-            height: 100%;
-            width: 300px;
-            background: rgba($color: #000000, $alpha: 0.9);
 
+      .selectedObjectWrapper {
+         position: absolute;
+         bottom: 40px; /* Moved to bottom for better view */
+         left: 50%;
+         transform: translateX(-50%);
+         z-index: 5;
+         pointer-events: none;
+         
+         .selectedObject {
+            pointer-events: auto;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: #fff;
+            font-weight: 500;
+            opacity: 0; /* It's controlled by JS but default to hidden */
+            transition: opacity 0.3s ease;
          }
       }
    }

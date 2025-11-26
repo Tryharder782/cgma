@@ -4,23 +4,38 @@ import { useScene } from './Scenecontext';
 
 
 const UI = ({ isUiHidden, hideObject, wrapperRef }) => {
-   const { model, selectedObject } = useScene();
+   const { model, selectedObject, updateSelectedObject } = useScene();
    const [isModelLoaded, setIsModelLoaded] = useState(false);
    const navigate = useNavigate()
    const UIWrapperRef = useRef(null)
-   const objectOverviewRef = useRef(null)
-   const itemListRef = useRef(null)
-   const [selectedObjectOverviewActive, setselectedObjectOverviewActive] = useState(false);
-   const [currentWindow, setCurrentWindow] = useState(1);
+   const [activeTab, setActiveTab] = useState('list'); // 'list' or 'info'
 
-
-   const menuInfoHandler = () => {
-      console.log('menu info')
-   }
+   // Translation map for list items
+   const getName = (name) => {
+      const translations = {
+         'височная_мышца_слева': 'Left Temporalis',
+         'височная_мышца_справа': 'Right Temporalis',
+         'жевательная_внешняя_слева': 'Left Masseter (Superficial)',
+         'жевательная_внешняя_справа': 'Right Masseter (Superficial)',
+         'жевательная_внутренняя_слева': 'Left Masseter (Deep)',
+         'жевательная_внутренняя_справа': 'Right Masseter (Deep)',
+         'латеральная_крыловидная_1_л': 'Left Lateral Pterygoid (Superior)',
+         'латеральная_крыловидная_2_л': 'Left Lateral Pterygoid (Inferior)',
+         'латеральная_крыловидная_1_п': 'Right Lateral Pterygoid (Superior)',
+         'латеральная_крыловидная_2_п': 'Right Lateral Pterygoid (Inferior)',
+         'медиальная_крыловидная_слева': 'Left Medial Pterygoid',
+         'медиальная_крыловидная_справа': 'Right Medial Pterygoid',
+         'латеральная_связка_слева': 'Left Lateral Ligament',
+         'латеральная_связка_справа': 'Right Lateral Ligament',
+         'суставная_капсула_слева': 'Left Joint Capsule',
+         'суставная_капсула_справа': 'Right Joint Capsule',
+         'диск_слева': 'Left Articular Disc',
+         'диск_справа': 'Right Articular Disc'
+      };
+      return translations[name] || name.replace(/_/g, ' ');
+   };
 
    useEffect(() => {
-      console.log('Model loaded:', model);
-
       if (model) {
          setIsModelLoaded(true)
       }
@@ -29,142 +44,134 @@ const UI = ({ isUiHidden, hideObject, wrapperRef }) => {
       }
    }, [model]);
 
-
    useEffect(() => {
-      if (!selectedObjectOverviewActive) {
-
-      }
-      else {
-
-      }
-   }, [selectedObjectOverviewActive]);
-
-   const toggleSelectedObjectOverviewActive = (value) => {
-      if (objectOverviewRef.current) {
-         objectOverviewRef.current.style.opacity = value
-         if (value === 1) {
-            objectOverviewRef.current.style.transform = 'translateX(0vw)'
-         }
-         else {
-            objectOverviewRef.current.style.transform = 'translateX(-50vw)'
-
-         }
-      }
-   }
-
-   useEffect(() => {
-      console.log(isUiHidden)
       if (isUiHidden) {
          UIWrapperRef.current.style.width = '0'
+         UIWrapperRef.current.style.opacity = '0'
+         UIWrapperRef.current.style.pointerEvents = 'none'
       }
       else {
          UIWrapperRef.current.style.width = '400px'
+         UIWrapperRef.current.style.opacity = '1'
+         UIWrapperRef.current.style.pointerEvents = 'all'
       }
    }, [isUiHidden]);
+
+   const handleObjectClick = (object) => {
+      updateSelectedObject(object);
+   };
+
    useEffect(() => {
-      console.log(selectedObject);
-   }, [selectedObject]);
+      if (selectedObject && activeTab === 'list') {
+         const element = document.getElementById(selectedObject.name);
+         if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+         }
+      }
+   }, [selectedObject, activeTab]);
 
    return (
       <div ref={UIWrapperRef} className='UIWrapper2'>
-
-         <div ref={itemListRef} className="List">
-            {/* <div className="objectName">
-                  {selectedObject !== '' && selectedObject}
-               </div> */}
-            {isModelLoaded && model.map((object) =>
-               <div key={object.uuid} id={object.name} className="item">
-                  <div className="itemDesc">
-                     {object.name.replace(/_/g, ' ')}
-                  </div>
-                  <div className="buttons">
-                     <div style={{ opacity: object.visible ? 1 : 0.5 }} onClick={(e) => { hideObject(e, object); console.log(object.visible) }} className="toggleHide button">
-                        H
-                     </div>
-                     <div onClick={() => { menuInfoHandler(); /*navigate('/Chewing')*/ }} className="info button">
-                        I
-                     </div>
-                  </div>
-               </div>
-            )
-            }
+         <div className="tabs">
+            <button
+               className={`tab-button ${activeTab === 'list' ? 'active' : ''}`}
+               onClick={() => setActiveTab('list')}
+            >
+               Parts List
+            </button>
+            <button
+               className={`tab-button ${activeTab === 'info' ? 'active' : ''}`}
+               onClick={() => setActiveTab('info')}
+            >
+               Info
+            </button>
          </div>
-         <div ref={objectOverviewRef} className='selectedObjectOverview'>
-            {selectedObject && <div>{selectedObject.name === 'височная_мышца_слева' || selectedObject.name === 'височная_мышца_справа' ? <div className="selectedObjectOverviewWrapper">
-               <img className='image' src="visok.png" alt="" />
-               <div className="text">
-                  <h3>Височная мышца</h3>
-                  <h4>Прикрепление:</h4>
-                  Начало данной мышцы вырьируется: впереди от скулового отростка лобной кости, сверху от сосцевидного отростка и внизу от подвисочного гребня. Височная фасция также является началом мышцы. Направление сухожилия соответствует оси наружного контура мышцы, проходит под скуловой дугой и прикрепляется к венечному отростку нижней челюсти. Передний отдел мышцы в 30% случаев образует лобную часть, волокна которой прикрепляются частично к венечному отростку, а частично(возвратные волокна) к мыщелковому отростку, что ведет к более точному контролю смыкания зубов.
-                  Функция
-                  Мышца является аддуктором(приводящая), ретрактором(мышца оттягиватель), а ее лобная часть – позиционирует мыщелок относительно бугорка. Приводит и поднимает нижнюю челюсть. Задняя часть височной мышцы, волокна которой направлены практически горизонтально, начинает ретракцию нижней челюсти из положения протрузии – является антагонистом нижней головки латеральной крыловидной мышцы.
 
-               </div>
-            </div>
-               : selectedObject.name === 'жевательная_внешняя_слева' || selectedObject.name === 'жевательная_внешняя_справа' ? <div className="selectedObjectOverviewWrapper">
-                  <img className='image' src="zhev.jpg" alt="" />
-                  <div className="text">
-                     <h3>жевателная мышца</h3>
-                     <h4>Прикрепление:</h4>
-                     Начинается от нижнего края и внутренней поверхности скуловой дуги, переднего ската суставного бугорка височной кости, височной фасции. Прикрепляется к жевательной бугристой наружной поверхности ветви нижней челюсти ниже ее вырезки. От нижней челюсти мышечные пучти направлены вверх, кпереди и кнаружи.
-                     Функция
-                     Является аддуктором, латеротатором. Она поднимает нижнюю челюсть. Направление мышечных волокон(вперед вверх) позволяет позиционировать мыщелковые отростки относительно бугров. Вместе с медиальной крыловидной мышцей жевательная мышца образует функциональную единицу – крыловидно-жевательная петля. Она может не только поднимать нижнюю челюсть, но и смещать ее латерально и немного вращать.
-                     <div onClick={() => navigate('')} className="link">Читать далее...</div>
-
-                  </div>
-               </div>
-                  : selectedObject.name === 'латеральная_связка_слева' || selectedObject.name === 'латеральная_связка_справа' || selectedObject.name === 'суставная_капсула_слева' || selectedObject.name === 'суставная_капсула_справа' || selectedObject.name === 'жевательная_внутренняя_слева' || selectedObject.name === 'жевательная_внутренняя_справа' ? <div className="selectedObjectOverviewWrapper">
-                     <img className='image' src="VNS.jpg" alt="" />
-                     <div className="text">
-                        <h3>Височно-нижнечелюстной сустав</h3>
-                        Височно-нижнечелюстной сустав (articulatio temporomandibular) образован нижнечелюстной ямкой височной кости и головкой мыщелкового отростка нижней челюсти. Впереди ямки находится суставной бугорок.
-
-                        Между суставными поверхностями имеется двояковогнутый суставной диск (discus articularis) овальной формы, образованный волокнистым хрящом, который разделяет полость сустава на два отдела: верхний и нижний.
-
-                        В верхнем этаже суставная поверхность височной кости сочленяется с верхней поверхностью суставного диска. Синовиальная мембрана этого этажа (membrana synovialis superior) покрывает внутреннюю поверхность капсулы и прикрепляется по краям суставного хряща. В нижнем этаже сочленяются головка нижней челюсти и нижняя поверхность суставного диска. Синовиальная мембрана нижнего этажа (membrana synovialis inferior) покрывает не только капсулу, но и заднюю поверхность шейки мыщелкового отростка, находящуюся внутри капсулы.
-
-                        Свободная суставная капсула на височной кости прикрепляется кпереди от суставного бугорка, а сзади — на уровне каменисто-барабанной щели. На мыщелковом отростке суставная капсула прикрепляется спереди по краю головки, а сзади на 0,5 см ниже головки нижней челюсти. Суставная капсула сращена по всей окружности с суставным диском. Капсула спереди тонкая, а сзади она утолщается и укрепляется несколькими связками. <div onClick={() => navigate('')} className="link">Читать далее...</div>
-
-                     </div>
-                  </div>
-                     : selectedObject.name === 'латеральная_крыловидная_1_л' || selectedObject.name === 'латеральная_крыловидная_2_л' || selectedObject.name === 'латеральная_крыловидная_1_п' || selectedObject.name === 'латеральная_крыловидная_2_п' ? <div className="selectedObjectOverviewWrapper">
-                        <img className='image' src="lateral.jpg" alt="" />
-                        <div className="text">
-                           <h3>Латеральная крыловидная мышца</h3>
-                           <h4>Прикрепление:</h4>
-                           Прикрепление
-                           Начало
-                           Верхняя головка: от подвисочного гребня большого крыла клиновидной кости
-                           Нижняя головка: от наружной поверхности латеральной пластинки отростка клиновидной кости и подвисочной фасции
-                           Прикрепление
-                           Верхняя головка: к суставной капсуле ВНЧС
-                           Нижняя головка: к крыловидной ямке передней поверхности мыщелкового отростка
-                           Функция
-                           Двустороннее сокращение мышцы приводит к перемещению и вращению в обоих височно-нижнечелюстных суставах. Нижние головки тянут мыщелок нижней челюсти вперед, что приводит к вращению мыщелка относительно нижней поверхности суставного диска. Верхние головки тянут суставную капсулу и диск кпереди. Нижние головки мышцы эксцентрично сокращаются, чтобы сгладить заднее смещение суставного диска и мыщелка нижней челюсти, противодействуя натяжению височных и жевательных мышц, которые оттягивают нижнюю челюсть кзади. Нижняя головка сжимается в одностороннем порядке, что ведет к движению челюсти из стороны в сторону, вращая мыщелок нижней челюсти кпереди.
-                           . <div onClick={() => navigate('')} className="link">Читать далее...</div>
-
+         <div className="tab-content">
+            {activeTab === 'list' && (
+               <div className="List">
+                  {isModelLoaded && model.map((object) =>
+                     <div key={object.uuid} id={object.name} className={`item ${selectedObject?.name === object.name ? 'selected' : ''}`}>
+                        <div className="itemDesc" onClick={() => handleObjectClick(object)}>
+                           {getName(object.name)}
                         </div>
-                     </div>
-                        : selectedObject.name === 'медиальная_крыловидная_справа' || selectedObject.name === 'медиальная_крыловидная_слева' ? <div className="selectedObjectOverviewWrapper">
-                           <img className='image' src="medial.jpg" alt="" />
-                           <div className="text">
-                              <h3>медиальная крыловидная мышца</h3>
-                              <h4>Прикрепление:</h4>
-                              Берет начало в крыловидной ямке(от крыловидного отростка клиновидной кости) и от пирамидального отростка небной кости(ее волокна следуют косо назад, вниз и латерально), прикрепляются к внутреней поверхности нижней челюсти с области угла и крыловидной бугристости. Часто переплетаются с волокнами нижней головки латеральной крыловидной мышцы.
-                              Функция
-                              Является аддуктором. Поднимает нижнюю челюсть, действуя одновременно и жевательной и височной. Одностороннее напряжение этой мышцы приводит к медиотрузии и часто участвует в блуксизме. Вектор сокращения мышцы направлен вперед, внутрь и вверх.
-                              <div onClick={() => navigate('')} className="link">Читать далее...</div>
-
+                        <div className="buttons">
+                           <div style={{ opacity: object.visible ? 1 : 0.5 }} onClick={(e) => { hideObject(e, object); }} className="toggleHide button" title="Hide/Show">
+                              👁
                            </div>
                         </div>
-                           : <div></div>
-            }
-            </div>
-            }
-         </div>
-         <div className="buttons">
-            <div onClick={() => toggleSelectedObjectOverviewActive(0)} className="button button1">список</div>
-            <div onClick={() => toggleSelectedObjectOverviewActive(1)} className="button button2">объект</div>
+                     </div>
+                  )}
+               </div>
+            )}
+
+            {activeTab === 'info' && (
+               <div className='selectedObjectOverview'>
+                  {selectedObject ? (
+                     selectedObject.name === 'височная_мышца_слева' || selectedObject.name === 'височная_мышца_справа' ? <div className="selectedObjectOverviewWrapper">
+                        <img className='image' src="visok.png" alt="" />
+                        <div className="text">
+                           <h3>Temporalis Muscle</h3>
+                           <h4>Attachment:</h4>
+                           The origin of this muscle varies: anterior to the zygomatic process of the frontal bone, superior to the mastoid process, and inferior to the infratemporal crest. The temporal fascia is also an origin of the muscle. The direction of the tendon corresponds to the axis of the outer contour of the muscle, passes under the zygomatic arch, and attaches to the coronoid process of the mandible. The anterior part of the muscle forms the frontal part in 30% of cases, the fibers of which attach partly to the coronoid process and partly (recurrent fibers) to the condylar process, leading to more precise control of tooth occlusion.
+                           <h4>Function:</h4>
+                           The muscle is an adductor (closes the jaw), retractor (pulls back), and its frontal part positions the condyle relative to the tubercle. It adducts and elevates the mandible. The posterior part of the temporalis muscle, whose fibers are directed almost horizontally, begins retraction of the mandible from a protruded position – acting as an antagonist to the inferior head of the lateral pterygoid muscle.
+                        </div>
+                     </div>
+                        : selectedObject.name === 'жевательная_внешняя_слева' || selectedObject.name === 'жевательная_внешняя_справа' ? <div className="selectedObjectOverviewWrapper">
+                           <img className='image' src="zhev.jpg" alt="" />
+                           <div className="text">
+                              <h3>Masseter Muscle</h3>
+                              <h4>Attachment:</h4>
+                              It begins at the lower edge and inner surface of the zygomatic arch, the anterior slope of the articular tubercle of the temporal bone, and the temporal fascia. It attaches to the masseteric tuberosity on the outer surface of the mandibular ramus below its notch. From the mandible, the muscle bundles are directed upwards, forwards, and outwards.
+                              <h4>Function:</h4>
+                              It is an adductor and laterotrusor. It elevates the mandible. The direction of the muscle fibers (forward and upward) allows positioning of the condylar processes relative to the tubercles. Together with the medial pterygoid muscle, the masseter forms a functional unit – the pterygomasseteric sling. It can not only elevate the mandible but also displace it laterally and rotate it slightly.
+                           </div>
+                        </div>
+                           : selectedObject.name === 'латеральная_связка_слева' || selectedObject.name === 'латеральная_связка_справа' || selectedObject.name === 'суставная_капсула_слева' || selectedObject.name === 'суставная_капсула_справа' || selectedObject.name === 'жевательная_внутренняя_слева' || selectedObject.name === 'жевательная_внутренняя_справа' ? <div className="selectedObjectOverviewWrapper">
+                              <img className='image' src="VNS.jpg" alt="" />
+                              <div className="text">
+                                 <h3>Temporomandibular Joint (TMJ)</h3>
+                                 The temporomandibular joint (articulatio temporomandibularis) is formed by the mandibular fossa of the temporal bone and the head of the condylar process of the mandible. Anterior to the fossa is the articular tubercle.
+
+                                 Between the articular surfaces, there is a biconcave articular disc (discus articularis) of oval shape, formed by fibrous cartilage, which divides the joint cavity into two compartments: superior and inferior.
+
+                                 In the upper compartment, the articular surface of the temporal bone articulates with the upper surface of the articular disc. The synovial membrane of this compartment covers the inner surface of the capsule and attaches to the edges of the articular cartilage. In the lower compartment, the head of the mandible and the lower surface of the articular disc articulate. The synovial membrane of the lower compartment covers not only the capsule but also the posterior surface of the neck of the condylar process located inside the capsule.
+
+                                 The loose joint capsule on the temporal bone attaches anterior to the articular tubercle, and posteriorly — at the level of the petrotympanic fissure. On the condylar process, the joint capsule attaches anteriorly along the edge of the head, and posteriorly 0.5 cm below the head of the mandible. The joint capsule is fused around the entire circumference with the articular disc. The capsule is thin anteriorly, while posteriorly it thickens and is reinforced by several ligaments.
+                              </div>
+                           </div>
+                              : selectedObject.name === 'латеральная_крыловидная_1_л' || selectedObject.name === 'латеральная_крыловидная_2_л' || selectedObject.name === 'латеральная_крыловидная_1_п' || selectedObject.name === 'латеральная_крыловидная_2_п' ? <div className="selectedObjectOverviewWrapper">
+                                 <img className='image' src="lateral.jpg" alt="" />
+                                 <div className="text">
+                                    <h3>Lateral Pterygoid Muscle</h3>
+                                    <h4>Attachment:</h4>
+                                    <strong>Origin:</strong><br />
+                                    Superior head: from the infratemporal crest of the greater wing of the sphenoid bone.<br />
+                                    Inferior head: from the outer surface of the lateral pterygoid plate of the sphenoid bone and the infratemporal fascia.<br />
+                                    <strong>Insertion:</strong><br />
+                                    Superior head: to the joint capsule of the TMJ.<br />
+                                    Inferior head: to the pterygoid fovea on the anterior surface of the condylar process.<br />
+                                    <h4>Function:</h4>
+                                    Bilateral contraction of the muscle leads to displacement and rotation in both temporomandibular joints. The inferior heads pull the mandibular condyle forward, which leads to rotation of the condyle relative to the lower surface of the articular disc. The superior heads pull the joint capsule and disc anteriorly. The inferior heads of the muscle contract eccentrically to smooth the posterior displacement of the articular disc and mandibular condyle, counteracting the tension of the temporalis and masseter muscles, which pull the mandible posteriorly. The inferior head contracts unilaterally, which leads to side-to-side jaw movement, rotating the mandibular condyle anteriorly.
+                                 </div>
+                              </div>
+                                 : selectedObject.name === 'медиальная_крыловидная_справа' || selectedObject.name === 'медиальная_крыловидная_слева' ? <div className="selectedObjectOverviewWrapper">
+                                    <img className='image' src="medial.jpg" alt="" />
+                                    <div className="text">
+                                       <h3>Medial Pterygoid Muscle</h3>
+                                       <h4>Attachment:</h4>
+                                       It originates in the pterygoid fossa (from the pterygoid process of the sphenoid bone) and from the pyramidal process of the palatine bone (its fibers run obliquely backward, downward, and laterally), attaching to the inner surface of the mandible in the region of the angle and pterygoid tuberosity. It often intertwines with fibers of the inferior head of the lateral pterygoid muscle.
+                                       <h4>Function:</h4>
+                                       It is an adductor. It elevates the mandible, acting simultaneously with the masseter and temporalis. Unilateral tension of this muscle leads to mediotrusion and is often involved in bruxism. The vector of muscle contraction is directed forward, inward, and upward.
+                                    </div>
+                                 </div>
+                                    : <div className="no-info">No information available for this part.</div>
+                  ) : (
+                     <div className="no-selection">Select a part to view details.</div>
+                  )}
+               </div>
+            )}
          </div>
       </div>
    );

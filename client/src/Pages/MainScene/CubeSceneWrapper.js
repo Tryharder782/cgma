@@ -7,8 +7,6 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { SceneProvider, useScene } from './Scenecontext';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
-import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
 
 
 const CubeSceneWrapper = () => {
@@ -21,27 +19,7 @@ const CubeSceneWrapper = () => {
 
    const modelRef = useRef(null); // Add this line
    const isModelLoadedRef = useRef(false);
-   const navigate = useNavigate()
-   let token;
-   let accessToken;
-   let user;
-   useEffect(() => {
-      token = localStorage.getItem('token')
-      accessToken = localStorage.getItem('accessToken')
-      console.log(token)
-      if (token && !accessToken) {
-         user = jwtDecode(token)
-         console.log(user)
-         if (user) {
-            if (user.role === 'BASIC')
-               navigate('/Profile')
-         }
-      }
-      else if (!token && !accessToken){
-         navigate('/Login')
-      }
-      
-   }, [localStorage]);
+
    // const geometry = new THREE.PlaneGeometry(5, 5); // Width and height of the plane
    // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide }); // Green plane
    // const plane = new THREE.Mesh(geometry, material);
@@ -68,37 +46,19 @@ const CubeSceneWrapper = () => {
    }
    // Загрузка модели
    const loadModel = () => {
-      if (user || accessToken) {
-         if (user) {
-            if (sceneRef.current && user.role !== 'BASIC') {
-               const loader = new GLTFLoader();
-               const dracoLoader = new DRACOLoader();
-               dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.4.1/');
-               loader.setDRACOLoader(dracoLoader);
-               loader.load('skull.gltf', (gltf) => {
-                  updateModel(gltf.scene.children)
-                  modelRef.current = gltf.scene
-                  sceneRef.current.add(modelRef.current)
-                  isModelLoadedRef.current = true;
-               }, undefined, (error) => {
-                  console.error(error);
-               });
-            }
-         }
-         else if (accessToken) {
-            const loader = new GLTFLoader();
-            const dracoLoader = new DRACOLoader();
-            dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.4.1/');
-            loader.setDRACOLoader(dracoLoader);
-            loader.load('skull.gltf', (gltf) => {
-               updateModel(gltf.scene.children)
-               modelRef.current = gltf.scene
-               sceneRef.current.add(modelRef.current)
-               isModelLoadedRef.current = true;
-            }, undefined, (error) => {
-               console.error(error);
-            });
-         }
+      if (sceneRef.current) {
+         const loader = new GLTFLoader();
+         const dracoLoader = new DRACOLoader();
+         dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.4.1/');
+         loader.setDRACOLoader(dracoLoader);
+         loader.load('skull.gltf', (gltf) => {
+            updateModel(gltf.scene.children)
+            modelRef.current = gltf.scene
+            sceneRef.current.add(modelRef.current)
+            isModelLoadedRef.current = true;
+         }, undefined, (error) => {
+            console.error(error);
+         });
       }
    };
    const hideModel = (e, target) => {
