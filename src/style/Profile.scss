@@ -1,0 +1,67 @@
+.profileWrapper {
+   width: 100vw;
+   height: calc(100vw - 61px);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-size: 16px;
+   .profileContainer{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-flow: column;
+      width: 450px;
+      height: 70px;
+      .row{
+         font-size: 2rem;
+         color: black;
+         .username{
+            text-align: center;
+
+         }
+         .value{
+            margin-top: 20px;
+            border-radius: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 400px;
+            height: 4rem;
+            border: 1px solid black;
+         }
+         .logoutButton{
+            
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 100px;
+            background: red;
+            height: 4rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.5s ease;
+         }
+         .createToken{
+            margin-top: 30px;
+            text-align: center;
+         }
+         .createTokenButton{
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: grey;
+            height: 4rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.5s ease;
+         }
+         .logoutButton:hover{
+            opacity: 0.8;
+         }
+      }
+      .page{
+         font-size: 5rem;
+      }
+   }
+}
