@@ -6,6 +6,7 @@ import { context } from '@react-three/fiber';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { SceneProvider, useScene } from './Scenecontext';
 import { useGLTF } from '@react-three/drei';
+import LoadingProgress from './LoadingProgress';
 
 // Component to handle model loading with Suspense
 const ModelLoader = ({ onLoad }) => {
@@ -85,7 +86,7 @@ const CubeSceneWrapper = () => {
       <div className="idk">
          <div className='CubeSceneWrapper'>
             <UIWrapper hideObject={hideModel} />
-            <Suspense fallback={null}>
+            <Suspense fallback={<LoadingProgress />}>
                <ModelLoader onLoad={handleModelLoad} />
             </Suspense>
             <CubeScene refs={{
