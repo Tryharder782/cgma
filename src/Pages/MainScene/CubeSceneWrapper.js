@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useRef, useState, Suspense } from 'react';
+import React, { useEffect, useRef, Suspense } from 'react';
 import * as THREE from 'three';
 import CubeScene from './CubeScene';
 import UIWrapper from './UIWrapper';
-import { context } from '@react-three/fiber';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { SceneProvider, useScene } from './Scenecontext';
+import { useScene } from './Scenecontext';
 import { useGLTF } from '@react-three/drei';
 import LoadingProgress from './LoadingProgress';
 

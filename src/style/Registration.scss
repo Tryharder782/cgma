@@ -1,10 +1,6 @@
 @font-face {
    font-family: Hero;
    src: url(ofont.ru_Hero.ttf);
- }
-@font-face {
-   font-family: JuliusSansOne;
-   src: url(JuliusSansOne-Regular.ttf);
 }
 
 @font-face {
@@ -12,70 +8,80 @@
    src: url(Inter-VariableFont_slnt,wght.ttf);
 }
 
-
 .RegistrationWrapper {
    font-size: 16px;
-   width: 100vw;
-   height: 100vh;
+   width: 100%;
+   min-height: calc(100vh - 60px);
    display: flex;
    justify-content: center;
    align-items: center;
    flex-flow: column;
-   font-family: Hero;
+   font-family: Inter, sans-serif;
    position: relative;
    overflow: hidden;
+   padding: 24px;
+   box-sizing: border-box;
+   background: radial-gradient(circle at top left, #24374a 0%, #101216 42%, #0b0d11 100%);
 
    .RegistrationContainer {
+      width: min(720px, 92vw);
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(17, 21, 27, 0.9);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
       transition: 0.5s ease;
 
       .title {
          text-align: center;
-         width: 600px;
-         height: 260px;
 
          .mainTitle {
-            font-size: 3em;
-            font-family: Hero;
-            font-weight: bold;
-            
+            font-size: clamp(1.3rem, 2.4vw, 2rem);
+            font-family: Hero, Inter, sans-serif;
+            letter-spacing: 0.04em;
+            color: #f1f5fb;
+            margin-bottom: 8px;
          }
 
          .page {
-            font-size: 3em;
-            margin: 10px 0;
+            font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+            margin: 8px 0;
+            color: #7fd9ff;
          }
 
          .subText {
-            font-size: 2em;
+            font-size: 1.05rem;
+            color: #c2c9d7;
          }
       }
 
       .inputs {
-         margin: 10px 0;
-         width: 600px;
-         height: 200px;
+         margin: 24px 0 14px;
+         width: 100%;
          display: flex;
          flex-flow: column;
          justify-content: center;
          align-items: center;
+         gap: 14px;
 
          .row {
-            height: 5.5em;
             width: 100%;
             display: flex;
             flex-flow: column;
-            justify-content: center;
-            align-items: center;
+            gap: 8px;
 
             .inputName {
-               font-size: 1.5em;
+               font-size: 0.95rem;
+               color: #d5deeb;
+               font-weight: 600;
+               letter-spacing: 0.03em;
             }
 
             .Input {
-               width: 90%;
-               flex-grow: 1;
-               border: 1px solid black;
-               border-radius: 30px;
+               width: 100%;
+               border: 1px solid rgba(255, 255, 255, 0.18);
+               border-radius: 12px;
+               background: rgba(255, 255, 255, 0.06);
 
                .inputComponent {
                   width: 100%;
@@ -85,69 +91,75 @@
                   .inputBox {
                      all: unset;
                      box-sizing: border-box !important;
-                     padding: 0 20px !important;
+                     padding: 0 14px !important;
                      display: flex;
                      width: 100%;
-                     height: inherit;
+                     height: 48px;
                      border-radius: inherit;
+                     color: #f4f7fb;
+                     font-size: 1rem;
                   }
                }
             }
          }
-
-         .row2 {
-            margin-top: 20px;
-         }
-
       }
 
       .links {
-         width: 600px;
-         height: 120px;
+         width: 100%;
          display: flex;
          justify-content: center;
          align-items: center;
          flex-flow: column;
 
          .row {
-            height: 3em;
+            width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
+         }
+
+         .row1 {
+            margin-bottom: 12px;
          }
 
          .button {
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 20px;
-            border: 1px solid black;
-            width: 5em;
-            height: 1.5em;
-            font-size: 1.5em;
+            border-radius: 12px;
+            border: 1px solid rgba(121, 221, 255, 0.6);
+            min-width: 150px;
+            height: 44px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
             cursor: pointer;
-            transition: 0.3s ease;
+            transition: 0.25s ease;
+            color: #e9f2ff;
+            background: rgba(121, 221, 255, 0.17);
          }
 
          .button:hover {
-            background: rgba($color: #000000, $alpha: 0.2);
+            background: rgba(121, 221, 255, 0.3);
          }
 
          .helpLinks {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            flex-flow: row;
+            flex-flow: wrap;
+            gap: 10px 14px;
 
             .link {
                cursor: pointer;
-               margin: 0 10px;
-               text-decoration: underline;
-               transition: 0.3s ease;
+               text-decoration: none;
+               transition: 0.25s ease;
+               color: #98bdd9;
+               font-size: 0.9rem;
             }
 
             .link:hover {
-               color: rgba($color: #000000, $alpha: 0.5);
+               color: #d9edff;
             }
          }
       }
@@ -156,35 +168,39 @@
    .warningWrapper {
       opacity: 0;
       position: absolute;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 16px;
-      background: rgba($color: #000000, $alpha: 0.3);
+      background: rgba(8, 10, 14, 0.78);
       transform: translateX(100vw);
       transition: opacity 0.3s ease;
       flex-flow: column;
+      z-index: 30;
 
       .warningContainer {
          display: flex;
          flex-flow: column;
          justify-content: center;
          align-items: center;
-         width: 1000px;
-         padding: 50px;
-         background: white;
-         border-radius: 30px;
-         box-shadow: 0 0 50px 0 rgba($color: #000000, $alpha: 0.6);
+         width: min(860px, 92vw);
+         padding: 34px;
+         background: #161b23;
+         color: #e5ecf8;
+         border-radius: 18px;
+         border: 1px solid rgba(255, 255, 255, 0.12);
+         box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.55);
 
          .warningText {
             text-align: center;
-            font-size: 5em;
-            margin-bottom: 200px;
+            font-size: clamp(1.3rem, 3.2vw, 2rem);
+            margin-bottom: 30px;
 
             .wraningSubText {
-               font-size: 1.5rem;
+               font-size: 1rem;
+               line-height: 1.65;
+               margin-top: 14px;
+               color: #b7c1d3;
             }
          }
 
@@ -192,78 +208,88 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 20px;
-            border: 1px solid black;
-            width: 200px;
-            height: 70px;
+            border-radius: 12px;
+            border: 1px solid rgba(126, 220, 255, 0.7);
+            width: 160px;
+            height: 46px;
             cursor: pointer;
-            font-size: 3em;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
             transition: 0.3s ease;
+            background: rgba(126, 220, 255, 0.15);
          }
 
          .confirmButton:hover {
-            background: rgba($color: #000000, $alpha: 0.1);
-            text-shadow: white 1px 0 10px;
+            background: rgba(126, 220, 255, 0.28);
          }
       }
    }
 
    .accessRequestWrapper {
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      min-height: calc(100vh - 60px);
       position: absolute;
       transition: transform 0.5s ease;
-      background: #000;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: white;
-
+      color: #f6f8fc;
+      background: linear-gradient(135deg, rgba(19, 24, 33, 0.97), rgba(10, 12, 16, 0.97));
       transform: translateX(100vw);
+
       .accessRequestContainer {
          display: flex;
          justify-content: center;
          align-items: center;
          flex-flow: column;
          text-align: center;
+         width: min(980px, 92vw);
+         padding: 30px;
+         border-radius: 20px;
+         border: 1px solid rgba(255, 255, 255, 0.12);
+         background: rgba(18, 23, 31, 0.9);
 
          .title {
             .mainTitle {
-               font-size: 3rem;
+               font-size: clamp(1.6rem, 3vw, 2.2rem);
             }
 
             .subTitle {
-               font-size: 1.5rem;
-               margin: 20px 0;
+               font-size: 1rem;
+               margin: 16px 0 22px;
+               color: #bcc8d8;
+               line-height: 1.55;
             }
          }
 
          .inputs {
-            margin: 10px 0;
-            width: 1200px;
-            height: 150px;
-            display: flex;
-            flex-flow: row;
-            justify-content: center;
-            align-items: center;
+            margin: 0 0 16px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
 
             .row {
-               height: 5em;
                width: 100%;
                display: flex;
                flex-flow: column;
                justify-content: center;
-               align-items: center;
+               align-items: stretch;
+               gap: 8px;
 
                .inputName {
-                  font-size: 1.5em;
+                  font-size: 0.95rem;
+                  text-align: left;
+                  color: #d5deeb;
+                  font-weight: 600;
                }
 
                .Input {
-                  width: 90%;
-                  flex-grow: 1;
-                  border: 1px solid white;
-                  border-radius: 30px;
+                  width: 100%;
+                  border: 1px solid rgba(255, 255, 255, 0.18);
+                  border-radius: 12px;
+                  background: rgba(255, 255, 255, 0.05);
 
                   .inputComponent {
                      width: 100%;
@@ -273,31 +299,40 @@
                      .inputBox {
                         all: unset;
                         box-sizing: border-box !important;
-                        padding: 0 20px !important;
+                        padding: 0 14px !important;
                         display: flex;
                         width: 100%;
-                        height: inherit;
+                        height: 46px;
                         border-radius: inherit;
-                        font-size: 1.5rem;
+                        font-size: 1rem;
+                        text-align: left;
+                        color: #f4f7fb;
                      }
                   }
                }
             }
-
-
          }
 
          .details {
+            width: 100%;
+
             .detailsInput {
+               width: 100%;
+
                .textarea {
                   all: unset;
+                  width: 100%;
+                  min-height: 180px;
                   word-break: break-word;
                   white-space: pre-wrap;
-                  padding: 15px;
+                  box-sizing: border-box;
+                  padding: 14px;
                   text-align: left;
-                  background: rgba($color: #ffffff, $alpha: 0.1);
-                  border-radius: 20px;
-                  font-size: 1.5rem;
+                  background: rgba(255, 255, 255, 0.08);
+                  border-radius: 12px;
+                  font-size: 1rem;
+                  line-height: 1.5;
+                  color: #e9f1fb;
                }
             }
          }
@@ -307,32 +342,33 @@
             flex-flow: row;
             justify-content: center;
             align-items: center;
-            font-size: 2rem;
-            margin-top: 20px;
+            margin-top: 18px;
+            gap: 14px;
 
             .button {
                display: flex;
                justify-content: center;
                align-items: center;
-               padding: 10px 20px;
-               height: 70px;
-               background: rgba($color: #ffffff, $alpha: 0.2);
-               border-radius: 20px;
+               min-width: 130px;
+               height: 44px;
+               background: rgba(255, 255, 255, 0.16);
+               border: 1px solid rgba(255, 255, 255, 0.18);
+               border-radius: 12px;
                transition: 0.3s ease;
                cursor: pointer;
+               font-size: 0.9rem;
+               font-weight: 700;
+               letter-spacing: 0.05em;
             }
 
             .button:hover {
-               background: rgba($color: #ffffff, $alpha: 0.5);
-            }
-
-            .backButton {
-               margin-right: 50px;
+               background: rgba(255, 255, 255, 0.28);
             }
 
             .locked {
-               color: rgba($color: #ffffff, $alpha: 0.2);
+               color: rgba(255, 255, 255, 0.3);
                pointer-events: none;
+               border-color: rgba(255, 255, 255, 0.12);
             }
          }
       }
@@ -340,75 +376,118 @@
 
    .tokenWindowWrapper {
       position: absolute;
+      inset: 0;
       opacity: 0;
-      width: 100%;
-      height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 16px;
-      background: rgba($color: #000000, $alpha: 0.3);
+      background: rgba(8, 10, 14, 0.78);
       transition: opacity 0.3s ease;
       flex-flow: column;
+      transform: translateX(-100vw);
+      z-index: 35;
 
       .tokenWindowContainer {
          display: flex;
          flex-flow: column;
          justify-content: space-around;
          align-items: center;
-         width: 1000px;
-         height: 500px;
-         padding: 50px;
-         background: white;
-         border-radius: 30px;
-         box-shadow: 0 0 50px 0 rgba($color: #000000, $alpha: 0.6);
+         width: min(760px, 92vw);
+         min-height: 340px;
+         padding: 28px;
+         background: #161b23;
+         border-radius: 18px;
+         border: 1px solid rgba(255, 255, 255, 0.12);
+         box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.55);
 
          .tokenWindowText {
             text-align: center;
-            font-size: 3em;
-            margin-bottom: 50px;
-
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            margin-bottom: 24px;
+            color: #ebf2ff;
          }
+
          .tokenWindowInput {
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2rem;
-            height: 70px;
-            .inputComponent{
-               width: 400px;
-               height: 70px;
-               .inputBox{
+            width: 100%;
+
+            .inputComponent {
+               width: min(460px, 100%);
+               height: 48px;
+
+               .inputBox {
                   box-sizing: border-box;
                   width: 100%;
                   height: 100%;
-                  font-size: 2rem;
-                  border-radius: 30px;
+                  font-size: 1rem;
+                  border-radius: 12px;
+                  border: 1px solid rgba(255, 255, 255, 0.18);
+                  background: rgba(255, 255, 255, 0.07);
+                  color: #f2f7ff;
+                  padding: 0 14px;
                }
             }
          }
-         .buttons{   
+
+         .buttons {
             display: flex;
             flex-flow: row;
+            gap: 12px;
+            margin-top: 18px;
+
             .button {
                display: flex;
                justify-content: center;
                align-items: center;
-               border-radius: 20px;
-               border: 1px solid black;
-               width: 200px;
-               height: 70px;
+               border-radius: 12px;
+               border: 1px solid rgba(255, 255, 255, 0.2);
+               min-width: 130px;
+               height: 42px;
                cursor: pointer;
-               font-size: 1.5em;
+               font-size: 0.9rem;
+               font-weight: 700;
+               letter-spacing: 0.04em;
                transition: 0.3s ease;
-               margin: 0 10px;
+               color: #f0f5ff;
+               background: rgba(255, 255, 255, 0.08);
             }
-   
+
             .button:hover {
-               background: rgba($color: #000000, $alpha: 0.1);
-               text-shadow: white 1px 0 10px;
+               background: rgba(255, 255, 255, 0.2);
             }
          }
+      }
+   }
+}
+
+@media (max-width: 900px) {
+   .RegistrationWrapper {
+      .accessRequestWrapper {
+         .accessRequestContainer {
+            .inputs {
+               grid-template-columns: 1fr;
+            }
+         }
+      }
+   }
+}
+
+@media (max-width: 640px) {
+   .RegistrationWrapper {
+      padding: 12px;
+
+      .RegistrationContainer,
+      .accessRequestWrapper .accessRequestContainer,
+      .tokenWindowWrapper .tokenWindowContainer,
+      .warningWrapper .warningContainer {
+         padding: 18px;
+      }
+
+      .RegistrationContainer .links .helpLinks {
+         flex-direction: column;
+         align-items: center;
       }
    }
 }

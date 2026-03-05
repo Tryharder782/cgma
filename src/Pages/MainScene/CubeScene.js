@@ -1,9 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import '../../style/CubeScene.scss';
 import { useScene } from './Scenecontext';
 
@@ -96,7 +94,6 @@ const CubeScene = ({ refs }) => {
       // camera.up.set(0, 1 , 0);
 
       renderer.setSize(window.innerWidth, window.innerHeight - 61);
-      console.log(mountRef)
       mountRef.current.appendChild(renderer.domElement);
 
       controls.enableDamping = true;
@@ -106,18 +103,13 @@ const CubeScene = ({ refs }) => {
          MIDDLE: THREE.MOUSE.DOLLY,
          RIGHT: THREE.MOUSE.PAN
       }
-      console.log(controls)
 
 
       let mouseDownPosition = { x: null, y: null }; // Use a local variable instead of state
 
       const onResize = () => {
-         if (renderer.domElement) {
-            console.log(renderer.domElement.clientWidth)
-         }
 
       }
-      // Добавление освещения
 
       const onMouseDown = (event) => {
          const rect = mountRef.current.getBoundingClientRect();
@@ -127,7 +119,6 @@ const CubeScene = ({ refs }) => {
             y: -((event.clientY - rect.top) / rect.height) * 2 + 1
          };
       };
-      // Обработчик отпускания кнопки мыши
       const onMouseUp = (event) => {
          if (camera !== null) {
             const rect = mountRef.current.getBoundingClientRect();
@@ -212,3 +203,5 @@ const CubeScene = ({ refs }) => {
 };
 
 export default CubeScene;
+
+

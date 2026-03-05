@@ -1,59 +1,285 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useScene } from './Scenecontext';
 
+const exactTranslations = {
+   'височная мышца слева': 'Left Temporalis',
+   'височная мышца справа': 'Right Temporalis',
+   'жевательная внешняя слева': 'Left Masseter (Superficial)',
+   'жевательная внешняя справа': 'Right Masseter (Superficial)',
+   'жевательная внутренняя слева': 'Left Masseter (Deep)',
+   'жевательная внутренняя справа': 'Right Masseter (Deep)',
+   'латеральная крыловидная 1 л': 'Left Lateral Pterygoid (Superior)',
+   'латеральная крыловидная 2 л': 'Left Lateral Pterygoid (Inferior)',
+   'латеральная крыловидная 1 п': 'Right Lateral Pterygoid (Superior)',
+   'латеральная крыловидная 2 п': 'Right Lateral Pterygoid (Inferior)',
+   'медиальная крыловидная слева': 'Left Medial Pterygoid',
+   'медиальная крыловидная справа': 'Right Medial Pterygoid',
+   'латеральная связка слева': 'Left Lateral Ligament',
+   'латеральная связка справа': 'Right Lateral Ligament',
+   'суставная капсула слева': 'Left Joint Capsule',
+   'суставная капсула справа': 'Right Joint Capsule',
+   'суставной диск слева': 'Left Articular Disc',
+   'суставной диск справа': 'Right Articular Disc',
+   'диск слева': 'Left Articular Disc',
+   'диск справа': 'Right Articular Disc',
+   'полость носа': 'Nasal Cavity',
+   'нёбная кость слева': 'Left Palatine Bone',
+   'нёбная кость справа': 'Right Palatine Bone',
+   'небная кость слева': 'Left Palatine Bone',
+   'небная кость справа': 'Right Palatine Bone',
+   'клиновидная кость': 'Sphenoid Bone',
+   'верхняя челюсть слева': 'Left Maxilla',
+   'верхняя челюсть справа': 'Right Maxilla',
+   'скуловая кость слева': 'Left Zygomatic Bone',
+   'скуловая кость справа': 'Right Zygomatic Bone',
+   'лобная кость': 'Frontal Bone',
+   'затылочная кость': 'Occipital Bone',
+   'теменная слева': 'Left Parietal Bone',
+   'теменная справа': 'Right Parietal Bone',
+   'теменная кость слева': 'Left Parietal Bone',
+   'теменная кость справа': 'Right Parietal Bone',
+   'височная кость слева': 'Left Temporal Bone',
+   'височная кость справа': 'Right Temporal Bone',
+   'нижняя челюсть': 'Mandible',
+   'вп слева': 'Left VP',
+   'вп справа': 'Right VP',
+   'дс слева': 'Left DS',
+   'дс справа': 'Right DS',
+   'лс слева': 'Left LS',
+   'лс справа': 'Right LS',
+   'мс слева': 'Left MS',
+   'мс справа': 'Right MS',
+   'нп слева': 'Left NP',
+   'нп справа': 'Right NP'
+};
 
-const UI = ({ isUiHidden, hideObject, wrapperRef }) => {
+const baseTranslations = {
+   'полость носа': 'Nasal Cavity',
+   'нёбная кость': 'Palatine Bone',
+   'небная кость': 'Palatine Bone',
+   'клиновидная кость': 'Sphenoid Bone',
+   'верхняя челюсть': 'Maxilla',
+   'скуловая кость': 'Zygomatic Bone',
+   'лобная кость': 'Frontal Bone',
+   'затылочная кость': 'Occipital Bone',
+   'теменная': 'Parietal Bone',
+   'височная кость': 'Temporal Bone',
+   'нижняя челюсть': 'Mandible',
+   'височная мышца': 'Temporalis',
+   'жевательная внешняя': 'Masseter (Superficial)',
+   'жевательная внутренняя': 'Masseter (Deep)',
+   'латеральная крыловидная': 'Lateral Pterygoid',
+   'медиальная крыловидная': 'Medial Pterygoid',
+   'латеральная связка': 'Lateral Ligament',
+   'суставная капсула': 'Joint Capsule',
+   'суставной диск': 'Articular Disc',
+   'диск': 'Articular Disc'
+};
+
+const partInfo = {
+   'Temporalis': {
+      image: '/static/visok.png',
+      summary: 'A fan-shaped muscle on the side of the skull that elevates and retracts the mandible.',
+      note: 'It is one of the key muscles controlling jaw closure and bite precision.'
+   },
+   'Masseter (Superficial)': {
+      image: '/static/zhev.jpg',
+      summary: 'The superficial masseter runs from the zygomatic arch to the mandibular ramus and helps close the jaw.',
+      note: 'It contributes significantly to bite force and jaw stability during chewing.'
+   },
+   'Masseter (Deep)': {
+      image: '/static/zhev.jpg',
+      summary: 'The deep masseter supports mandibular elevation and fine control of jaw position.',
+      note: 'It works with temporalis and pterygoid muscles during mastication.'
+   },
+   'Lateral Pterygoid (Superior)': {
+      image: '/static/lateral.jpg',
+      summary: 'The superior head helps control disc-condyle coordination in the TMJ during jaw movement.',
+      note: 'It is important for smooth opening, closing, and forward translation of the mandible.'
+   },
+   'Lateral Pterygoid (Inferior)': {
+      image: '/static/lateral.jpg',
+      summary: 'The inferior head mainly protrudes the mandible and assists side-to-side movement.',
+      note: 'Unilateral action contributes to lateral excursion used in grinding.'
+   },
+   'Lateral Pterygoid': {
+      image: '/static/lateral.jpg',
+      summary: 'A two-headed muscle involved in protrusion, lateral movement, and TMJ coordination.',
+      note: 'It is central to dynamic jaw mechanics during speech and chewing.'
+   },
+   'Medial Pterygoid': {
+      image: '/static/medial.jpg',
+      summary: 'A deep jaw elevator that mirrors the masseter on the inner side of the mandible.',
+      note: 'Together with the masseter it forms a functional sling around the mandibular angle.'
+   },
+   'Lateral Ligament': {
+      image: '/static/VNS.jpg',
+      summary: 'A stabilizing ligament of the TMJ that limits excessive posterior and inferior displacement.',
+      note: 'It helps protect joint surfaces during forceful mandibular movements.'
+   },
+   'Joint Capsule': {
+      image: '/static/VNS.jpg',
+      summary: 'A fibrous envelope surrounding the temporomandibular joint.',
+      note: 'It contains synovial structures and provides joint stability while allowing mobility.'
+   },
+   'Articular Disc': {
+      image: '/static/VNS.jpg',
+      summary: 'A fibrocartilaginous disc that separates the TMJ into upper and lower compartments.',
+      note: 'It improves load distribution and supports smooth translation/rotation of the condyle.'
+   },
+   'Nasal Cavity': {
+      summary: 'An air passage inside the skull involved in breathing, warming air, and resonance.',
+      note: 'It also contributes to olfaction and influences craniofacial airflow dynamics.'
+   },
+   'Palatine Bone': {
+      summary: 'A paired bone forming part of the hard palate and posterior wall of the nasal cavity.',
+      note: 'It supports separation between oral and nasal cavities and contributes to maxillary structure.'
+   },
+   'Sphenoid Bone': {
+      summary: 'A central cranial base bone that articulates with multiple neighboring bones.',
+      note: 'It contains key foramina and serves as an anatomical crossroads of the skull base.'
+   },
+   'Maxilla': {
+      summary: 'The upper jaw bone supporting the upper teeth, orbit floor, and midface contour.',
+      note: 'It is fundamental for occlusion, mastication, and facial support.'
+   },
+   'Zygomatic Bone': {
+      summary: 'The cheekbone that forms part of the lateral orbit and zygomatic arch.',
+      note: 'It provides facial width and transmits forces from the maxilla and temporal region.'
+   },
+   'Frontal Bone': {
+      summary: 'Bone of the forehead and superior orbit, forming the anterior cranial vault.',
+      note: 'It protects the frontal brain region and shapes the upper face.'
+   },
+   'Occipital Bone': {
+      summary: 'Posterior cranial bone containing the foramen magnum and supporting skull-base structures.',
+      note: 'It plays a major role in craniocervical articulation and posterior cranial protection.'
+   },
+   'Parietal Bone': {
+      summary: 'Paired skull vault bones forming much of the superior-lateral cranial surface.',
+      note: 'They protect the cerebral hemispheres and define cranial contour.'
+   },
+   'Temporal Bone': {
+      summary: 'A complex lateral skull bone containing auditory structures and TMJ components.',
+      note: 'It contributes to hearing anatomy and forms part of the mandibular articulation.'
+   },
+   'Mandible': {
+      summary: 'The lower jaw and the only freely movable bone of the facial skeleton.',
+      note: 'It is essential for mastication, speech articulation, and lower dental support.'
+   },
+   'VP': {
+      summary: 'A labeled supporting structure in this model used for orientation and study context.',
+      note: 'Use adjacent anatomy and side designation to interpret its specific role in the scene.'
+   },
+   'DS': {
+      summary: 'A labeled supporting structure in this model used for orientation and study context.',
+      note: 'Review nearby landmarks in the scene to connect this marker with local anatomy.'
+   },
+   'LS': {
+      summary: 'A labeled supporting structure in this model used for orientation and study context.',
+      note: 'This marker is intended to help identify neighboring functional components.'
+   },
+   'MS': {
+      summary: 'A labeled supporting structure in this model used for orientation and study context.',
+      note: 'Interpretation is improved by examining surrounding bone and soft-tissue relations.'
+   },
+   'NP': {
+      summary: 'A labeled supporting structure in this model used for orientation and study context.',
+      note: 'Treat this as a reference element and correlate with adjacent named anatomy.'
+   }
+};
+
+const normalizeName = (name = '') =>
+   name
+      .toLowerCase()
+      .replace(/_/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+const titleCase = (name = '') =>
+   name
+      .split(' ')
+      .filter(Boolean)
+      .map((word) => (word.length <= 2 ? word.toUpperCase() : `${word[0].toUpperCase()}${word.slice(1)}`))
+      .join(' ');
+
+const getTranslatedName = (name = '') => {
+   const normalized = normalizeName(name);
+   if (exactTranslations[normalized]) {
+      return exactTranslations[normalized];
+   }
+
+   const sideMatch = normalized.match(/\s(слева|справа)$/);
+   const side = sideMatch ? (sideMatch[1] === 'слева' ? 'Left' : 'Right') : '';
+   const base = sideMatch ? normalized.replace(/\s(слева|справа)$/, '') : normalized;
+   const translatedBase = baseTranslations[base];
+
+   if (translatedBase) {
+      return side ? `${side} ${translatedBase}` : translatedBase;
+   }
+
+   if (/^[a-z0-9 _-]+$/i.test(name)) {
+      return titleCase(name.replace(/_/g, ' '));
+   }
+
+   return titleCase(name.replace(/_/g, ' '));
+};
+
+const getPartInfo = (objectName = '') => {
+   const translated = getTranslatedName(objectName);
+   const sideMatch = translated.match(/^(Left|Right)\s+(.+)$/);
+   const side = sideMatch ? sideMatch[1] : null;
+   const baseName = sideMatch ? sideMatch[2] : translated;
+   const info = partInfo[translated] || partInfo[baseName];
+
+   if (info) {
+      return {
+         title: translated,
+         image: info.image,
+         summary: info.summary,
+         note: info.note,
+         orientation: side ? `This structure is shown on the ${side.toLowerCase()} side of the model.` : null
+      };
+   }
+
+   return {
+      title: translated,
+      summary: `${translated} is included as a distinct study element in this anatomical model.`,
+      note: 'Use neighboring landmarks and the 3D view to understand its position and relationships.',
+      orientation: side ? `This structure is shown on the ${side.toLowerCase()} side of the model.` : null
+   };
+};
+
+const UI = ({ isUiHidden, hideObject }) => {
    const { model, selectedObject, updateSelectedObject } = useScene();
    const [isModelLoaded, setIsModelLoaded] = useState(false);
-   const navigate = useNavigate()
-   const UIWrapperRef = useRef(null)
-   const [activeTab, setActiveTab] = useState('list'); // 'list' or 'info'
+   const UIWrapperRef = useRef(null);
+   const [activeTab, setActiveTab] = useState('list');
 
-   // Translation map for list items
-   const getName = (name) => {
-      const translations = {
-         'височная_мышца_слева': 'Left Temporalis',
-         'височная_мышца_справа': 'Right Temporalis',
-         'жевательная_внешняя_слева': 'Left Masseter (Superficial)',
-         'жевательная_внешняя_справа': 'Right Masseter (Superficial)',
-         'жевательная_внутренняя_слева': 'Left Masseter (Deep)',
-         'жевательная_внутренняя_справа': 'Right Masseter (Deep)',
-         'латеральная_крыловидная_1_л': 'Left Lateral Pterygoid (Superior)',
-         'латеральная_крыловидная_2_л': 'Left Lateral Pterygoid (Inferior)',
-         'латеральная_крыловидная_1_п': 'Right Lateral Pterygoid (Superior)',
-         'латеральная_крыловидная_2_п': 'Right Lateral Pterygoid (Inferior)',
-         'медиальная_крыловидная_слева': 'Left Medial Pterygoid',
-         'медиальная_крыловидная_справа': 'Right Medial Pterygoid',
-         'латеральная_связка_слева': 'Left Lateral Ligament',
-         'латеральная_связка_справа': 'Right Lateral Ligament',
-         'суставная_капсула_слева': 'Left Joint Capsule',
-         'суставная_капсула_справа': 'Right Joint Capsule',
-         'диск_слева': 'Left Articular Disc',
-         'диск_справа': 'Right Articular Disc'
-      };
-      return translations[name] || name.replace(/_/g, ' ');
-   };
+   const selectedInfo = useMemo(() => {
+      if (!selectedObject) {
+         return null;
+      }
+      return getPartInfo(selectedObject.name);
+   }, [selectedObject]);
 
    useEffect(() => {
-      if (model) {
-         setIsModelLoaded(true)
-      }
-      else {
-         setIsModelLoaded(false)
-      }
+      setIsModelLoaded(Array.isArray(model) && model.length > 0);
    }, [model]);
 
    useEffect(() => {
-      if (isUiHidden) {
-         UIWrapperRef.current.style.width = '0'
-         UIWrapperRef.current.style.opacity = '0'
-         UIWrapperRef.current.style.pointerEvents = 'none'
+      if (!UIWrapperRef.current) {
+         return;
       }
-      else {
-         UIWrapperRef.current.style.width = '400px'
-         UIWrapperRef.current.style.opacity = '1'
-         UIWrapperRef.current.style.pointerEvents = 'all'
+
+      if (isUiHidden) {
+         UIWrapperRef.current.style.width = '0';
+         UIWrapperRef.current.style.opacity = '0';
+         UIWrapperRef.current.style.pointerEvents = 'none';
+      } else {
+         UIWrapperRef.current.style.width = 'clamp(300px, 30vw, 430px)';
+         UIWrapperRef.current.style.opacity = '1';
+         UIWrapperRef.current.style.pointerEvents = 'all';
       }
    }, [isUiHidden]);
 
@@ -74,12 +300,14 @@ const UI = ({ isUiHidden, hideObject, wrapperRef }) => {
       <div ref={UIWrapperRef} className='UIWrapper2'>
          <div className="tabs">
             <button
+               type="button"
                className={`tab-button ${activeTab === 'list' ? 'active' : ''}`}
                onClick={() => setActiveTab('list')}
             >
                Parts List
             </button>
             <button
+               type="button"
                className={`tab-button ${activeTab === 'info' ? 'active' : ''}`}
                onClick={() => setActiveTab('info')}
             >
@@ -90,83 +318,49 @@ const UI = ({ isUiHidden, hideObject, wrapperRef }) => {
          <div className="tab-content">
             {activeTab === 'list' && (
                <div className="List">
-                  {isModelLoaded && model.map((object) =>
+                  {isModelLoaded && model.map((object) => (
                      <div key={object.uuid} id={object.name} className={`item ${selectedObject?.name === object.name ? 'selected' : ''}`}>
-                        <div className="itemDesc" onClick={() => handleObjectClick(object)}>
-                           {getName(object.name)}
-                        </div>
+                        <button type="button" className="itemDesc" onClick={() => handleObjectClick(object)}>
+                           {getTranslatedName(object.name)}
+                        </button>
                         <div className="buttons">
-                           <div style={{ opacity: object.visible ? 1 : 0.5 }} onClick={(e) => { hideObject(e, object); }} className="toggleHide button" title="Hide/Show">
-                              👁
-                           </div>
+                           <button
+                              type="button"
+                              style={{ opacity: object.visible ? 1 : 0.6 }}
+                              onClick={(event) => hideObject(event, object)}
+                              className="toggleHide button"
+                              title={object.visible ? 'Hide part' : 'Show part'}
+                              aria-label={object.visible ? `Hide ${getTranslatedName(object.name)}` : `Show ${getTranslatedName(object.name)}`}
+                           >
+                              View
+                           </button>
                         </div>
                      </div>
-                  )}
+                  ))}
                </div>
             )}
 
             {activeTab === 'info' && (
                <div className='selectedObjectOverview'>
-                  {selectedObject ? (
-                     selectedObject.name === 'височная_мышца_слева' || selectedObject.name === 'височная_мышца_справа' ? <div className="selectedObjectOverviewWrapper">
-                        <img className='image' src="visok.png" alt="" />
+                  {selectedInfo ? (
+                     <div className="selectedObjectOverviewWrapper">
+                        {selectedInfo.image && (
+                           <img className='image' src={selectedInfo.image} alt={selectedInfo.title} />
+                        )}
                         <div className="text">
-                           <h3>Temporalis Muscle</h3>
-                           <h4>Attachment:</h4>
-                           The origin of this muscle varies: anterior to the zygomatic process of the frontal bone, superior to the mastoid process, and inferior to the infratemporal crest. The temporal fascia is also an origin of the muscle. The direction of the tendon corresponds to the axis of the outer contour of the muscle, passes under the zygomatic arch, and attaches to the coronoid process of the mandible. The anterior part of the muscle forms the frontal part in 30% of cases, the fibers of which attach partly to the coronoid process and partly (recurrent fibers) to the condylar process, leading to more precise control of tooth occlusion.
-                           <h4>Function:</h4>
-                           The muscle is an adductor (closes the jaw), retractor (pulls back), and its frontal part positions the condyle relative to the tubercle. It adducts and elevates the mandible. The posterior part of the temporalis muscle, whose fibers are directed almost horizontally, begins retraction of the mandible from a protruded position – acting as an antagonist to the inferior head of the lateral pterygoid muscle.
+                           <h3>{selectedInfo.title}</h3>
+                           <h4>Overview</h4>
+                           <p>{selectedInfo.summary}</p>
+                           <h4>Why it matters</h4>
+                           <p>{selectedInfo.note}</p>
+                           {selectedInfo.orientation && (
+                              <>
+                                 <h4>Orientation</h4>
+                                 <p>{selectedInfo.orientation}</p>
+                              </>
+                           )}
                         </div>
                      </div>
-                        : selectedObject.name === 'жевательная_внешняя_слева' || selectedObject.name === 'жевательная_внешняя_справа' ? <div className="selectedObjectOverviewWrapper">
-                           <img className='image' src="zhev.jpg" alt="" />
-                           <div className="text">
-                              <h3>Masseter Muscle</h3>
-                              <h4>Attachment:</h4>
-                              It begins at the lower edge and inner surface of the zygomatic arch, the anterior slope of the articular tubercle of the temporal bone, and the temporal fascia. It attaches to the masseteric tuberosity on the outer surface of the mandibular ramus below its notch. From the mandible, the muscle bundles are directed upwards, forwards, and outwards.
-                              <h4>Function:</h4>
-                              It is an adductor and laterotrusor. It elevates the mandible. The direction of the muscle fibers (forward and upward) allows positioning of the condylar processes relative to the tubercles. Together with the medial pterygoid muscle, the masseter forms a functional unit – the pterygomasseteric sling. It can not only elevate the mandible but also displace it laterally and rotate it slightly.
-                           </div>
-                        </div>
-                           : selectedObject.name === 'латеральная_связка_слева' || selectedObject.name === 'латеральная_связка_справа' || selectedObject.name === 'суставная_капсула_слева' || selectedObject.name === 'суставная_капсула_справа' || selectedObject.name === 'жевательная_внутренняя_слева' || selectedObject.name === 'жевательная_внутренняя_справа' ? <div className="selectedObjectOverviewWrapper">
-                              <img className='image' src="VNS.jpg" alt="" />
-                              <div className="text">
-                                 <h3>Temporomandibular Joint (TMJ)</h3>
-                                 The temporomandibular joint (articulatio temporomandibularis) is formed by the mandibular fossa of the temporal bone and the head of the condylar process of the mandible. Anterior to the fossa is the articular tubercle.
-
-                                 Between the articular surfaces, there is a biconcave articular disc (discus articularis) of oval shape, formed by fibrous cartilage, which divides the joint cavity into two compartments: superior and inferior.
-
-                                 In the upper compartment, the articular surface of the temporal bone articulates with the upper surface of the articular disc. The synovial membrane of this compartment covers the inner surface of the capsule and attaches to the edges of the articular cartilage. In the lower compartment, the head of the mandible and the lower surface of the articular disc articulate. The synovial membrane of the lower compartment covers not only the capsule but also the posterior surface of the neck of the condylar process located inside the capsule.
-
-                                 The loose joint capsule on the temporal bone attaches anterior to the articular tubercle, and posteriorly — at the level of the petrotympanic fissure. On the condylar process, the joint capsule attaches anteriorly along the edge of the head, and posteriorly 0.5 cm below the head of the mandible. The joint capsule is fused around the entire circumference with the articular disc. The capsule is thin anteriorly, while posteriorly it thickens and is reinforced by several ligaments.
-                              </div>
-                           </div>
-                              : selectedObject.name === 'латеральная_крыловидная_1_л' || selectedObject.name === 'латеральная_крыловидная_2_л' || selectedObject.name === 'латеральная_крыловидная_1_п' || selectedObject.name === 'латеральная_крыловидная_2_п' ? <div className="selectedObjectOverviewWrapper">
-                                 <img className='image' src="lateral.jpg" alt="" />
-                                 <div className="text">
-                                    <h3>Lateral Pterygoid Muscle</h3>
-                                    <h4>Attachment:</h4>
-                                    <strong>Origin:</strong><br />
-                                    Superior head: from the infratemporal crest of the greater wing of the sphenoid bone.<br />
-                                    Inferior head: from the outer surface of the lateral pterygoid plate of the sphenoid bone and the infratemporal fascia.<br />
-                                    <strong>Insertion:</strong><br />
-                                    Superior head: to the joint capsule of the TMJ.<br />
-                                    Inferior head: to the pterygoid fovea on the anterior surface of the condylar process.<br />
-                                    <h4>Function:</h4>
-                                    Bilateral contraction of the muscle leads to displacement and rotation in both temporomandibular joints. The inferior heads pull the mandibular condyle forward, which leads to rotation of the condyle relative to the lower surface of the articular disc. The superior heads pull the joint capsule and disc anteriorly. The inferior heads of the muscle contract eccentrically to smooth the posterior displacement of the articular disc and mandibular condyle, counteracting the tension of the temporalis and masseter muscles, which pull the mandible posteriorly. The inferior head contracts unilaterally, which leads to side-to-side jaw movement, rotating the mandibular condyle anteriorly.
-                                 </div>
-                              </div>
-                                 : selectedObject.name === 'медиальная_крыловидная_справа' || selectedObject.name === 'медиальная_крыловидная_слева' ? <div className="selectedObjectOverviewWrapper">
-                                    <img className='image' src="medial.jpg" alt="" />
-                                    <div className="text">
-                                       <h3>Medial Pterygoid Muscle</h3>
-                                       <h4>Attachment:</h4>
-                                       It originates in the pterygoid fossa (from the pterygoid process of the sphenoid bone) and from the pyramidal process of the palatine bone (its fibers run obliquely backward, downward, and laterally), attaching to the inner surface of the mandible in the region of the angle and pterygoid tuberosity. It often intertwines with fibers of the inferior head of the lateral pterygoid muscle.
-                                       <h4>Function:</h4>
-                                       It is an adductor. It elevates the mandible, acting simultaneously with the masseter and temporalis. Unilateral tension of this muscle leads to mediotrusion and is often involved in bruxism. The vector of muscle contraction is directed forward, inward, and upward.
-                                    </div>
-                                 </div>
-                                    : <div className="no-info">No information available for this part.</div>
                   ) : (
                      <div className="no-selection">Select a part to view details.</div>
                   )}

@@ -3,7 +3,7 @@ import { useProgress } from '@react-three/drei';
 import '../../style/LoadingProgress.scss';
 
 const LoadingProgress = () => {
-   const { progress, active, loaded, total } = useProgress();
+   const { progress, loaded, total } = useProgress();
 
    return (
       <div className="loading-container">
